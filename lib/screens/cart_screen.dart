@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:first_flutter/data/data.dart';
 import 'package:first_flutter/models/order.dart';
 import 'package:flutter/material.dart';
@@ -51,12 +53,9 @@ class _CartScreenState extends State<CartScreen> {
                         Container(
                           width: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.black54,
-                              width: 0.8
-                            )
-                          ),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                  color: Colors.black54, width: 0.8)),
                           child: Row(
                             children: [
                               Text('-',
@@ -95,14 +94,63 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double totalPrice = 0;
+    currentUser.cart.forEach(
+        (Order order) => totalPrice += order.quantity * order.food.price);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Cart (${currentUser.cart.length})'),
       ),
       body: ListView.separated(
           itemBuilder: (BuildContext context, int index) {
-            Order order = currentUser.cart[index];
-            return _buildCartItem(order);
+            if (index < currentUser.cart.length) {
+              Order order = currentUser.cart[index];
+              return _buildCartItem(order);
+            }
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Estimated Delivery Time:',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        '25 min',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total Cost:',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        '\$${totalPrice.toStringAsFixed(2)}',
+                        style: TextStyle(
+                            color: Colors.green[700],
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 80,)
+                ],
+              ),
+            );
           },
           separatorBuilder: (BuildContext context, int index) {
             return Divider(
@@ -110,7 +158,25 @@ class _CartScreenState extends State<CartScreen> {
               color: Colors.grey,
             );
           },
-          itemCount: currentUser.cart.length),
+          itemCount: currentUser.cart.length + 1),
+      bottomSheet: Container(
+        height: 100,
+        width: MediaQuery.of(context).size.width,
+        decoration:
+            BoxDecoration(color: Theme.of(context).primaryColor,  boxShadow: [
+          BoxShadow(color: Colors.black26, offset: Offset(0, -1), blurRadius: 6)
+        ]),
+        child: Center(
+          child: ElevatedButton(onPressed: () {}, child: Text('CHECKOUT',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2
+            ),
+          )),
+        ),
+      ),
     );
   }
 }
