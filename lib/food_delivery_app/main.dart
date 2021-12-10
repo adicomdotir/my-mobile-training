@@ -1,4 +1,4 @@
-import 'package:first_flutter/screens/home_screen.dart';
+import 'package:first_flutter/food_delivery_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

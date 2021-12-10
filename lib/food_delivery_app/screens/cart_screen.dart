@@ -1,7 +1,7 @@
 import 'dart:js';
 
-import 'package:first_flutter/data/data.dart';
-import 'package:first_flutter/models/order.dart';
+import 'package:first_flutter/food_delivery_app/data/data.dart';
+import 'package:first_flutter/food_delivery_app/models/order.dart';
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatefulWidget {
@@ -57,6 +57,7 @@ class _CartScreenState extends State<CartScreen> {
                               border: Border.all(
                                   color: Colors.black54, width: 0.8)),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text('-',
                                   style: TextStyle(

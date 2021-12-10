@@ -1,6 +1,6 @@
 
-import 'package:first_flutter/models/food.dart';
-import 'package:first_flutter/models/restaurant.dart';
+import 'package:first_flutter/food_delivery_app/models/food.dart';
+import 'package:first_flutter/food_delivery_app/models/restaurant.dart';
 
 class Order {
   final Restaurant restaurant;

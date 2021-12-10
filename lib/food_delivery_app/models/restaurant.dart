@@ -1,4 +1,4 @@
-import 'package:first_flutter/models/food.dart';
+import 'package:first_flutter/food_delivery_app/models/food.dart';
 
 class Restaurant {
   final String imageUrl;

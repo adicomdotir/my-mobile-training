@@ -1,4 +1,4 @@
-import 'package:first_flutter/models/order.dart';
+import 'package:first_flutter/food_delivery_app/models/order.dart';
 
 class User {
   final String name;

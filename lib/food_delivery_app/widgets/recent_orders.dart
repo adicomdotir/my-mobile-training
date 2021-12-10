@@ -1,5 +1,5 @@
-import 'package:first_flutter/data/data.dart';
-import 'package:first_flutter/models/order.dart';
+import 'package:first_flutter/food_delivery_app/data/data.dart';
+import 'package:first_flutter/food_delivery_app/models/order.dart';
 import 'package:flutter/material.dart';
 
 class RecentOrders extends StatelessWidget {
