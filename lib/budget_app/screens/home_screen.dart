@@ -1,3 +1,5 @@
+import 'package:first_flutter/budget_app/data/data.dart';
+import 'package:first_flutter/budget_app/widgets/bar_chart.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,8 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            pinned: true,
-            // floating: true,
+            // pinned: true,
+            floating: true,
             forceElevated: true,
             expandedHeight: 100,
             flexibleSpace: FlexibleSpaceBar(
@@ -39,11 +41,21 @@ class _HomeScreenState extends State<HomeScreen> {
               (BuildContext context, int index) {
                 return Container(
                   margin: EdgeInsets.all(10),
-                  height: 100,
-                  color: Colors.red,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 2),
+                        blurRadius: 6
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(10)
+                  ),
+                  child: BarChart(expenses: weeklySpending,),
                 );
               },
-              childCount: 10
+              childCount: 1
             )
           )
         ],
