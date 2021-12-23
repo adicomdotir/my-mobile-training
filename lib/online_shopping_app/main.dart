@@ -1,6 +1,7 @@
 import 'package:first_flutter/shoes_shop_app/product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 void main(List<String> args) {
   runApp(Shop());
@@ -18,22 +19,22 @@ class _ShopState extends State<Shop> {
     Product(
       name: "T - SHIRT",
       price: "126",
-      image: "https://deltapayam.com/wp-content/uploads/lameh-dress.jpg"
+      image: "https://deltapayam.com/wp-content/uploads/2021/12/Untitled-1-192-800x491.jpg"
     ),
     Product(
       name: "SHIRT",
       price: "100",
-      image: "https://deltapayam.com/wp-content/uploads/lameh-dress.jpg"
+      image: "https://deltapayam.com/wp-content/uploads/2021/12/Untitled-1-192-800x491.jpg"
     ),
     Product(
       name: "FLEECE",
       price: "134",
-      image: "https://deltapayam.com/wp-content/uploads/lameh-dress.jpg"
+      image: "https://deltapayam.com/wp-content/uploads/2021/12/Untitled-1-192-800x491.jpg"
     ),
     Product(
       name: "SWEATER",
       price: "96",
-      image: "https://deltapayam.com/wp-content/uploads/lameh-dress.jpg"
+      image: "https://deltapayam.com/wp-content/uploads/2021/12/Untitled-1-192-800x491.jpg"
     )
   ];
   List category = [
@@ -81,7 +82,7 @@ class _ShopState extends State<Shop> {
                 ),
                 Expanded(
                   child: StaggeredGridView.countBuilder(
-                    corssAxisCount: 4,
+                    crossAxisCount: 4,
                     itemCount: listProduct.length,
                     itemBuilder: (BuildContext context, int index) => 
                       Card(
