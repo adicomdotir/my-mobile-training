@@ -1,204 +1,148 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'cart.dart';
+
 void main(List<String> args) {
-  runApp(Cart());
+  runApp(
+    MaterialApp(
+      home: Login(),
+    )
+  );
 }
 
-class Cart extends StatefulWidget {
-  const Cart({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _CartState createState() => _CartState();
+  _LoginState createState() => _LoginState();
 }
 
-class _CartState extends State<Cart> {
-  List<CartModel> listModel = [
-    CartModel(
-        name: 'Apple Juice',
-        count: 0,
-        price: "8.65",
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
-    CartModel(
-        name: 'Pinapple Juice',
-        count: 1,
-        price: "9.40",
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
-    CartModel(
-        name: 'Grapse Juice',
-        count: 3,
-        price: "10.50",
-        image:
-            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
-  ];
+class _LoginState extends State<Login> {
+  final TextEditingController _txtEmailCtrl = TextEditingController();
+  final TextEditingController _txtPasswordCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Color(0xFF3B4450),
-          body: Column(
-            children: [
-              Expanded(
-                  child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.arrow_left,
+    return Scaffold(
+        backgroundColor: Color(0xFF8500FF),
+        body: Column(
+          children: [
+            Container(
+              height: 150,
+              width: double.infinity,
+              child: Center(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
                       color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      )),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius:
+                        BorderRadius.only(topLeft: Radius.circular(50))),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
                     ),
-                    Spacer(),
-                    Expanded(
-                        child: Text(
-                      'MY CART',
+                    Text(
+                      'Login',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )),
-                    Spacer()
+                          fontWeight: FontWeight.w500,
+                          fontSize: 50,
+                          color: Color(0xFF8500FF)),
+                    ),
+                    TextFormFieldWidget(
+                        controller: _txtEmailCtrl, name: 'Email'),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormFieldWidget(
+                        controller: _txtPasswordCtrl, name: 'Password'),
+                    Spacer(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 32),
+                      child: MaterialButton(
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (ctx) => Cart()));
+                        },
+                        minWidth: double.infinity,
+                        height: 50,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50)),
+                        color: Color(0xFF8500FF),
+                        child: Text(
+                          'Login',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
+                      ),
+                    )
                   ],
                 ),
-              )),
-              Expanded(
-                flex: 7,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Color(0xFF1E2843),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30))),
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: ListView.builder(
-                      itemCount: listModel.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: Image.network(
-                                  listModel[index].image,
-                                  height: 150,
-                                  width: 100,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              Spacer(),
-                              Container(
-                                height: 150,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      listModel[index].name,
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      'Lorem ipsum dolor sit amet',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    Text(
-                                      '\$ ${listModel[index].price}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              if (listModel[index].count > 0) {
-                                                listModel[index].count--;
-                                              }
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF1E2843),
-                                              borderRadius: BorderRadius.circular(50),
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 1
-                                              )
-                                            ),
-                                            child: Icon(Icons.remove,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(width: 10,),
-                                        Text(listModel[index].count.toString(), 
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold
-                                        ),),
-                                        SizedBox(width: 10,),
-                                        GestureDetector(
-                                          onTap: () {
-                                            setState(() {
-                                              listModel[index].count++;
-                                            });
-                                          },
-                                          child: Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                              color: Color(0xFF1E2843),
-                                              borderRadius: BorderRadius.circular(50),
-                                              border: Border.all(
-                                                color: Colors.white,
-                                                width: 1
-                                              )
-                                            ),
-                                            child: Icon(Icons.add,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      ),
     );
   }
 }
 
-class CartModel {
-  String name;
-  String price;
-  String image;
-  int count;
+class TextFormFieldWidget extends StatefulWidget {
+  final TextEditingController controller;
+  final String name;
 
-  CartModel(
-      {required this.name,
-      required this.image,
-      required this.price,
-      required this.count});
+  const TextFormFieldWidget(
+      {Key? key, required this.controller, required this.name})
+      : super(key: key);
+
+  @override
+  _TextFormFieldWidgetState createState() => _TextFormFieldWidgetState();
+}
+
+class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5,
+      color: Colors.grey[200],
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
+      margin: EdgeInsets.symmetric(horizontal: 30),
+      child: TextFormField(
+        style: TextStyle(fontSize: 12),
+        textAlignVertical: TextAlignVertical.bottom,
+        controller: widget.controller,
+        textInputAction: TextInputAction.go,
+        autofocus: false,
+        textAlign: TextAlign.left,
+        decoration: InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 8),
+            fillColor: Colors.red,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            hintText: widget.name,
+            hintStyle: TextStyle(fontWeight: FontWeight.bold),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white))),
+      ),
+    );
+  }
 }
