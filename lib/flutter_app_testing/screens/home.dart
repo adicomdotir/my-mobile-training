@@ -1,4 +1,5 @@
 import 'package:first_flutter/flutter_app_testing/models/favorites.dart';
+import 'package:first_flutter/flutter_app_testing/screens/favorites.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +16,9 @@ class HomePage extends StatelessWidget {
         actions: [
           TextButton.icon(
               style: TextButton.styleFrom(primary: Colors.white),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, FavoritesPage.routeName);
+              },
               icon: Icon(Icons.favorite_border),
               label: Text('Favorites'))
         ],
