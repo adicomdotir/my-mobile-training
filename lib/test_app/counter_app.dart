@@ -30,9 +30,18 @@ class _CounterAppState extends State<CounterApp> {
           title: Text('Counter App'),
         ),
         body: Center(
-            child: Text(
-          counter.toString(),
-          style: TextStyle(fontSize: 28, color: Colors.black),
+            child: Column(
+          children: [
+            ElevatedButton(onPressed: () {
+              setState(() {
+                counter++;
+              });
+            }, child: Text('Click')),
+            Text(
+              counter.toString(),
+              style: TextStyle(fontSize: 28, color: Colors.black),
+            ),
+          ],
         )),
         floatingActionButton: FloatingActionButton(
           onPressed: () {

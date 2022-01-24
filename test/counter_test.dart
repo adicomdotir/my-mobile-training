@@ -1,30 +1,23 @@
-import 'package:first_flutter/test_app/counter.dart' as app;
+import 'package:first_flutter/test_app/counter_app.dart' as app;
+import 'package:first_flutter/test_app/counter_app.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 
 void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
   group('end-to-end test', () {
     testWidgets('tap on the floating action button, verify counter',
         (WidgetTester tester) async {
-      app.main();
-      await tester.pumpAndSettle();
+      await tester.pumpWidget(CounterApp());
 
-      // Verify the counter starts at 0.
+      var btn = find.widgetWithText(ElevatedButton, 'Click');
+      var finder = find.byIcon(Icons.add);
+      // await tester.press(btn);
+      await tester.pump(Duration(seconds: 1));
+
+      // Ignore this line for now
+      // It just verifies that the value is what we expect it to be
       expect(find.text('0'), findsOneWidget);
-
-      // Finds the floating action button to tap on.
-      final Finder fab = find.byTooltip('Increment');
-
-      // Emulate a tap on the floating action button.
-      await tester.tap(fab);
-
-      // Trigger a frame.
-      await tester.pumpAndSettle();
-
-      // Verify the counter increments by 1.
-      expect(find.text('1'), findsOneWidget);
     });
   });
 }
