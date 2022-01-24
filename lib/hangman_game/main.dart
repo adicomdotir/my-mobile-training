@@ -15,15 +15,29 @@ class HangmanApp extends StatefulWidget {
 class _HangmanAppState extends State<HangmanApp> {
   List<bool> letterClick = List.generate(27, (index) => false);
   int globalIdx = 0;
-  String actualAnswer = 'ANKARA';
+  int questionIndex = 0;
+  String actualAnswer = '';
   String correctAnswer = '------';
   String wrongAnswer = '------';
   bool gameComplete = false;
   String message = '';
+  int liveCnt = 5;
+  int score = 0;
+
+  @override
+  void initState() {
+    actualAnswer = answers[questionIndex].toUpperCase();
+    correctAnswer =
+        List.generate(answers[questionIndex].length, (index) => '-').join('');
+    wrongAnswer =
+        List.generate(answers[questionIndex].length, (index) => '-').join('');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'RobotoMono'),
       home: Scaffold(
         body: SafeArea(
@@ -33,8 +47,40 @@ class _HangmanAppState extends State<HangmanApp> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Icon(
+                            Icons.favorite,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                          Text(
+                            liveCnt.toString(),
+                            style: TextStyle(
+                                color: Color(0xFF40149C), fontSize: 18),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Text(
+                        score.toString(),
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
               SizedBox(
-                height: 64,
+                height: 48,
               ),
               Text(
                 'What is capital of ',
@@ -44,7 +90,7 @@ class _HangmanAppState extends State<HangmanApp> {
                 height: 8,
               ),
               Text(
-                'Turkey',
+                questions[questionIndex],
                 style: TextStyle(fontSize: 40, color: Colors.white),
               ),
               SizedBox(
@@ -874,7 +920,30 @@ class _HangmanAppState extends State<HangmanApp> {
                     fontSize: 25,
                   ),
                 ),
-              )
+              ),
+              gameComplete
+                  ? TextButton(
+                      onPressed: () {
+                        setState(() {
+                          questionIndex++;
+                          letterClick = List.generate(27, (index) => false);
+                          globalIdx = 0;
+                          actualAnswer = answers[questionIndex].toLowerCase();
+                          correctAnswer = correctAnswer = List.generate(
+                                  answers[questionIndex].length, (index) => '-')
+                              .join('');
+                          wrongAnswer = correctAnswer = List.generate(
+                                  answers[questionIndex].length, (index) => '-')
+                              .join('');
+                          gameComplete = false;
+                          message = '';
+                        });
+                      },
+                      child: Text('Next Question'))
+                  : Text(''),
+              SizedBox(
+                height: 16,
+              ),
             ],
           ),
         )),
@@ -884,8 +953,9 @@ class _HangmanAppState extends State<HangmanApp> {
 
   void checkAnswer(String letter) {
     if (globalIdx >= actualAnswer.length) {
-      message = 'You Lose';
+      message = 'You lose one live';
       gameComplete = true;
+      liveCnt--;
     }
 
     if (gameComplete == false) {
@@ -905,9 +975,25 @@ class _HangmanAppState extends State<HangmanApp> {
         globalIdx += 1;
       }
       if (correctAnswer == actualAnswer) {
-        message = 'You Win';
+        message = 'Congratulation';
         gameComplete = true;
+        score += 10;
       }
     }
   }
 }
+
+List<String> questions = [
+  'Turkey',
+  'Azerbijan',
+  'Iraq',
+  'Iran',
+  'France',
+];
+List<String> answers = [
+  'Ankara',
+  'Baku',
+  'Baghdad',
+  'Tehran',
+  'Paris',
+];
