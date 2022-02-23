@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,4 +99,56 @@ class CounterState {
   int color = 0;
 
   CounterState(this.counter, this.color);
+}
+
+class CounterBlocTmp {
+  int _cnt = 0;
+
+  StreamController<int> _counterStateCtrl = StreamController<int>();
+  StreamSink<int> get _counterStateSink => _counterStateCtrl.sink;
+  Stream<int> get counter => _counterStateCtrl.stream;
+
+  StreamController<CounterEvent> _counterEventCtrl = StreamController<CounterEvent>();
+  StreamSink<CounterEvent> get counterEventSink => _counterEventCtrl.sink;
+
+  CounterBlocTmp() {
+    _counterEventCtrl.stream.listen((event) {
+      if (event is Increment) {
+        _cnt += 1;
+      } else if (event is Decrement) {
+        _cnt -= 1;
+      }
+
+      _counterStateSink.add(_cnt);
+    });
+  }
+
+  void dispose() {
+    _counterStateCtrl.close();
+    _counterEventCtrl.close();
+  }
+}
+
+class CustomPracticeWidget extends StatefulWidget {
+  const CustomPracticeWidget({ Key? key }) : super(key: key);
+
+  @override
+  _CustomPracticeWidgetState createState() => _CustomPracticeWidgetState();
+}
+
+class _CustomPracticeWidgetState extends State<CustomPracticeWidget> {
+  CounterBlocTmp counterBlocTmp = CounterBlocTmp();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: StreamBuilder(
+        initialData: 0,
+        stream: counterBlocTmp.counter,
+        builder: (ctx, AsyncSnapshot<int> snapshot) {
+          return Text(snapshot.data.toString());
+        },
+      ),
+    );
+  }
 }
