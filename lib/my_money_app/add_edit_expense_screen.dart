@@ -1,5 +1,6 @@
-import 'package:first_flutter/bloc_example/main.dart';
 import 'package:first_flutter/my_money_app/add_edit_category_screen.dart';
+import 'package:first_flutter/my_money_app/category.dart';
+import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
 
 class AddEditExpenseScreen extends StatefulWidget {
@@ -10,8 +11,41 @@ class AddEditExpenseScreen extends StatefulWidget {
 }
 
 class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
+  TextEditingController _titleCtrl = TextEditingController();
+  TextEditingController _priceCtrl = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  String categoryValue = 'One';
+  String categoryValue = '';
+  List<Category> categoryTitle = [];
+
+  @override
+  void initState() {
+    print('init state');
+    dbSection();
+    super.initState();
+  }
+
+  void dbSection() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    List<Category> categoryList = await databaseHelper.getAllCategory();
+    setState(() {
+      categoryTitle = categoryList;
+      categoryValue = categoryTitle.first.id.toString();
+    });
+  }
+
+  void insertDbSection() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    int date = selectedDate.microsecondsSinceEpoch;
+    Expense expense = Expense(
+        title: _titleCtrl.text,
+        price: _priceCtrl.text,
+        categoryId: int.parse(categoryValue),
+        date: date);
+    await databaseHelper.insertExpense(expense);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +58,22 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
         child: Column(
           children: [
             TextField(
+                controller: _titleCtrl,
                 decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-              labelText: "Title",
-            )),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  labelText: "Title",
+                )),
             SizedBox(
               height: 16,
             ),
             TextField(
+                controller: _priceCtrl,
                 decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
-              labelText: "Price",
-            )),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16)),
+                  labelText: "Price",
+                )),
             SizedBox(
               height: 16,
             ),
@@ -50,12 +86,10 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   },
                   child: Text(
                     'Select Date',
-                    style: TextStyle(fontSize: 20),
                   ),
                 ),
                 Text(
                   "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
-                  style: TextStyle(fontSize: 20),
                 )
               ],
             ),
@@ -67,7 +101,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 Expanded(
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Label',
+                      labelText: 'Category',
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 12.0, vertical: 0.0),
                       border: OutlineInputBorder(
@@ -84,11 +118,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                             categoryValue = newValue!;
                           });
                         },
-                        items: <String>['One', 'Two', 'Free', 'Four']
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: categoryTitle
+                            .map<DropdownMenuItem<String>>((Category category) {
                           return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
+                            value: category.id.toString(),
+                            child: Text(category.title),
                           );
                         }).toList(),
                       ),
@@ -104,11 +138,20 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                     color: Theme.of(context).primaryColor,
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (builder) => AddEditCategoryScreen()));
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(
+                            builder: (builder) => AddEditCategoryScreen()))
+                        .then((value) => dbSection());
                   },
                 )
               ],
             ),
+            SizedBox(
+              height: 16,
+            ),
+            ElevatedButton(onPressed: () {
+              insertDbSection();
+            }, child: Text('Save'))
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:first_flutter/my_money_app/category.dart';
+import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
 
 class AddEditCategoryScreen extends StatefulWidget {
@@ -50,13 +51,8 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
   void dbSection() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
-    Category category = Category(id: 0, title: _titleCtrl.text);
+    Category category = Category(title: _titleCtrl.text);
     await databaseHelper.insertCategory(category);
-    List<Category> categoryList = await databaseHelper.getAllCategory();
-    print('Count : ' + categoryList.length.toString());
-    categoryList.forEach((element) {
-      print('${element.id.toString()} => ${element.title}');
-    });
     Navigator.pop(context);
   }
 }
