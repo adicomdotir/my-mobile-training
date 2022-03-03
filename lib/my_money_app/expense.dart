@@ -41,8 +41,8 @@ class DatabaseHelper {
       await db.execute(
           'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text)');
       await db.execute(
-          'CREATE TABLE expense(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text, categoryId INTEGER, FOREIGN KEY (categoryId) REFERENCES category (id))');
-    }, version: 2);
+          'CREATE TABLE expense(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text, date INTEGER, price Text, categoryId INTEGER, FOREIGN KEY (categoryId) REFERENCES category (id))');
+    }, version: 1);
   }
 
   Future<void> insertExpense(Expense expense) async {
