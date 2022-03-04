@@ -46,8 +46,10 @@ class _BaseCategoryState extends State<BaseCategory> {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (builder) => AddEditCategoryScreen())).then((value) => dbSection());
+            Navigator.of(context)
+                .push(MaterialPageRoute(
+                    builder: (builder) => AddEditCategoryScreen()))
+                .then((value) => dbSection());
           },
         ),
         body: ListView.builder(
@@ -66,7 +68,9 @@ class _BaseCategoryState extends State<BaseCategory> {
                       ),
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
-                            builder: (builder) => AddEditCategoryScreen()));
+                            builder: (builder) => AddEditCategoryScreen(
+                                  category: categoryList[index],
+                                ))).then((value) => dbSection());
                       },
                     ),
                     GestureDetector(

@@ -4,8 +4,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Category {
-  final int? id;
-  final String title;
+  int? id;
+  String title;
 
   Category({this.id, required this.title});
 
