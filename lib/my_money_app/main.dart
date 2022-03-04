@@ -1,3 +1,4 @@
+import 'package:first_flutter/my_money_app/base_category.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,11 +19,26 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('My Money App'),),
+      appBar: AppBar(
+        title: Text('My Money App'),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (builder) => BaseCategory()));
+                },
+                child: Text('Categories'))
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (builder) => AddEditExpenseScreen()));
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (builder) => AddEditExpenseScreen()));
         },
       ),
     );
