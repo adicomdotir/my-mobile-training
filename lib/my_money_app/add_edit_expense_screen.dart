@@ -4,7 +4,9 @@ import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
 
 class AddEditExpenseScreen extends StatefulWidget {
-  const AddEditExpenseScreen({Key? key}) : super(key: key);
+  Expense? expense;
+
+  AddEditExpenseScreen({Key? key, this.expense}) : super(key: key);
 
   @override
   _AddEditExpenseScreenState createState() => _AddEditExpenseScreenState();
@@ -19,8 +21,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
 
   @override
   void initState() {
-    print('init state');
     dbSection();
+    _titleCtrl.text = widget.expense?.title ?? '';
+    _priceCtrl.text = widget.expense?.price ?? '';
+    categoryValue = widget.expense?.categoryId.toString() ?? '';
+    selectedDate = DateTime.fromMicrosecondsSinceEpoch(widget.expense?.date ?? DateTime.now().microsecondsSinceEpoch);
     super.initState();
   }
 
@@ -30,7 +35,9 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     List<Category> categoryList = await databaseHelper.getAllCategory();
     setState(() {
       categoryTitle = categoryList;
-      categoryValue = categoryTitle.first.id.toString();
+      if (categoryValue.isEmpty) {
+        categoryValue = categoryTitle.first.id.toString();
+      }
     });
   }
 
@@ -43,7 +50,12 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
         price: _priceCtrl.text,
         categoryId: int.parse(categoryValue),
         date: date);
-    await databaseHelper.insertExpense(expense);
+    if (widget.expense == null) {
+      await databaseHelper.insertExpense(expense);
+    } else {
+      expense.id = widget.expense?.id;
+      await databaseHelper.updateExpense(expense);
+    }
     Navigator.of(context).pop();
   }
 
@@ -149,9 +161,11 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             SizedBox(
               height: 16,
             ),
-            ElevatedButton(onPressed: () {
-              insertDbSection();
-            }, child: Text('Save'))
+            ElevatedButton(
+                onPressed: () {
+                  insertDbSection();
+                },
+                child: Text('Save'))
           ],
         ),
       ),

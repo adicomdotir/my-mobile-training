@@ -6,18 +6,21 @@ import 'package:sqflite/sqflite.dart';
 import 'category.dart';
 
 class Expense {
-  final int? id;
+  int? id;
   final String title;
   final String price;
   final int categoryId;
   final int date;
+  final String? categoryTitle;
 
   Expense(
       {this.id,
       required this.title,
       required this.price,
       required this.categoryId,
-      required this.date});
+      required this.date,
+      this.categoryTitle
+      });
 
   Map<String, dynamic> toMap() {
     return {
@@ -51,7 +54,9 @@ class DatabaseHelper {
   }
 
   Future<List<Expense>> getAllExpense() async {
-    final List<Map<String, dynamic>> maps = await db.query('expense');
+    // final List<Map<String, dynamic>> maps = await db.query('expense');
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        'SELECT expense.*, category.title as categoryTitle FROM expense INNER JOIN category on category.id = categoryId');
     return List.generate(
         maps.length,
         (idx) => Expense(
@@ -59,7 +64,9 @@ class DatabaseHelper {
             title: maps[idx]['title'],
             price: maps[idx]['price'],
             date: maps[idx]['date'],
-            categoryId: maps[idx]['categoryId']));
+            categoryId: maps[idx]['categoryId'],
+            categoryTitle: maps[idx]['categoryTitle']
+            ));
   }
 
   Future<void> updateExpense(Expense expense) async {

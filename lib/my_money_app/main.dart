@@ -1,4 +1,5 @@
 import 'package:first_flutter/my_money_app/base_category.dart';
+import 'package:first_flutter/my_money_app/base_expenses.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,10 +28,19 @@ class HomePage extends StatelessWidget {
           children: [
             ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (builder) => BaseCategory()));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (builder) => BaseCategory()));
                 },
-                child: Text('Categories'))
+                child: Text('Categories')),
+            SizedBox(
+              height: 16,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (builder) => BaseExpense()));
+                },
+                child: Text('Expenses'))
           ],
         ),
       ),
