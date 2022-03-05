@@ -51,7 +51,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                     dbSection();
                   }
                 },
-                child: Text('Save'))
+                child: widget.category == null ? Text('Save') : Text('Update'))
           ],
         ),
       ),

@@ -63,7 +63,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Expense'),
+        title: widget.expense == null ? Text('Add Expense') : Text('Edit Expense'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -165,7 +165,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 onPressed: () {
                   insertDbSection();
                 },
-                child: Text('Save'))
+                child: widget.expense == null ? Text('Save') : Text('Update'))
           ],
         ),
       ),
