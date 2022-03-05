@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:first_flutter/my_money_app/add_edit_category_screen.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:first_flutter/my_money_app/category.dart';
+import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:flutter/material.dart';
 
 class BaseCategory extends StatefulWidget {
@@ -61,17 +64,30 @@ class _BaseCategoryState extends State<BaseCategory> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    GestureDetector(
-                      child: Text(
-                        '${categoryList[index].title}',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (builder) => AddEditCategoryScreen(
-                                  category: categoryList[index],
-                                ))).then((value) => dbSection());
-                      },
+                    Row(
+                      children: [
+                        Container(
+                          width: 10,
+                          height: 25,
+                          color:
+                              convertHexColorToRgb(categoryList[index].color),
+                        ),
+                        SizedBox(width: 16,),
+                        GestureDetector(
+                          child: Text(
+                            '${categoryList[index].title}',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                    builder: (builder) => AddEditCategoryScreen(
+                                          category: categoryList[index],
+                                        )))
+                                .then((value) => dbSection());
+                          },
+                        ),
+                      ],
                     ),
                     GestureDetector(
                         onTap: () {

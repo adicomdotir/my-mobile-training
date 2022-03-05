@@ -12,6 +12,7 @@ class Expense {
   final int categoryId;
   final int date;
   final String? categoryTitle;
+  final String? categoryColor;
 
   Expense(
       {this.id,
@@ -19,8 +20,8 @@ class Expense {
       required this.price,
       required this.categoryId,
       required this.date,
-      this.categoryTitle
-      });
+      this.categoryTitle,
+      this.categoryColor});
 
   Map<String, dynamic> toMap() {
     return {
@@ -42,7 +43,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath() + 'database.db');
     db = await openDatabase(path, onCreate: (db, version) async {
       await db.execute(
-          'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text)');
+          'CREATE TABLE category(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text, color Text)');
       await db.execute(
           'CREATE TABLE expense(id INTEGER PRIMARY KEY AUTOINCREMENT, title Text, date INTEGER, price Text, categoryId INTEGER, FOREIGN KEY (categoryId) REFERENCES category (id))');
     }, version: 1);
@@ -56,7 +57,7 @@ class DatabaseHelper {
   Future<List<Expense>> getAllExpense() async {
     // final List<Map<String, dynamic>> maps = await db.query('expense');
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-        'SELECT expense.*, category.title as categoryTitle FROM expense INNER JOIN category on category.id = categoryId');
+        'SELECT expense.*, category.title AS categoryTitle, category.color AS categoryColor FROM expense INNER JOIN category on category.id = categoryId');
     return List.generate(
         maps.length,
         (idx) => Expense(
@@ -65,8 +66,8 @@ class DatabaseHelper {
             price: maps[idx]['price'],
             date: maps[idx]['date'],
             categoryId: maps[idx]['categoryId'],
-            categoryTitle: maps[idx]['categoryTitle']
-            ));
+            categoryColor: maps[idx]['categoryColor'],
+            categoryTitle: maps[idx]['categoryTitle']));
   }
 
   Future<void> updateExpense(Expense expense) async {
@@ -85,8 +86,12 @@ class DatabaseHelper {
 
   Future<List<Category>> getAllCategory() async {
     final List<Map<String, dynamic>> maps = await db.query('category');
-    return List.generate(maps.length,
-        (idx) => Category(id: maps[idx]['id'], title: maps[idx]['title']));
+    return List.generate(
+        maps.length,
+        (idx) => Category(
+            id: maps[idx]['id'],
+            title: maps[idx]['title'],
+            color: maps[idx]['color']));
   }
 
   Future<void> updateCategory(Category category) async {

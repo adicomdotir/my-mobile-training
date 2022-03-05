@@ -2,6 +2,7 @@ import 'package:first_flutter/my_money_app/add_edit_category_screen.dart';
 import 'package:first_flutter/my_money_app/add_edit_expense_screen.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:first_flutter/my_money_app/category.dart';
+import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:flutter/material.dart';
 
 class BaseExpense extends StatefulWidget {
@@ -63,6 +64,12 @@ class _BaseExpenseState extends State<BaseExpense> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      Container(
+                        height: 25,
+                        width: 10,
+                        color: convertHexColorToRgb(expenseList[index].categoryColor ?? ''),
+                      ),
+                      SizedBox(width: 16,),
                       Expanded(
                         child: Container(
                           child: GestureDetector(
@@ -91,7 +98,8 @@ class _BaseExpenseState extends State<BaseExpense> {
                             onTap: () {
                               Navigator.of(context)
                                   .push(MaterialPageRoute(
-                                      builder: (builder) => AddEditExpenseScreen(
+                                      builder: (builder) =>
+                                          AddEditExpenseScreen(
                                             expense: expenseList[index],
                                           )))
                                   .then((value) => dbSection());

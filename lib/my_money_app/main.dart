@@ -1,5 +1,6 @@
 import 'package:first_flutter/my_money_app/base_category.dart';
 import 'package:first_flutter/my_money_app/base_expenses.dart';
+import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,12 @@ class HomePage extends StatelessWidget {
   const HomePage({
     Key? key,
   }) : super(key: key);
+
+  void dbSection() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    
+  }
 
   @override
   Widget build(BuildContext context) {
