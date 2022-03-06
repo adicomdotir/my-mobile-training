@@ -21,34 +21,50 @@ class HomePage extends StatelessWidget {
   void dbSection() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
-    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 32,
+              ),
+              Text('Menu', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+              Divider(
+                thickness: 1,
+                height: 32,
+                endIndent: 32,
+                indent: 32,
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (builder) => BaseCategory()));
+                  },
+                  child: Text('Categories')),
+              SizedBox(
+                height: 4,
+              ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (builder) => BaseExpense()));
+                  },
+                  child: Text('Expenses'))
+            ],
+          ),
+        ),
+      ),
       appBar: AppBar(
         title: Text('My Money App'),
       ),
       body: Center(
         child: Column(
-          children: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (builder) => BaseCategory()));
-                },
-                child: Text('Categories')),
-            SizedBox(
-              height: 16,
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (builder) => BaseExpense()));
-                },
-                child: Text('Expenses'))
-          ],
+          children: [],
         ),
       ),
       floatingActionButton: FloatingActionButton(
