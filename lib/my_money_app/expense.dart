@@ -70,6 +70,16 @@ class DatabaseHelper {
             categoryTitle: maps[idx]['categoryTitle']));
   }
 
+  Future<int> getAllExpenseAfterTime(int micro) async {
+    final List<Map<String, dynamic>> maps = await db
+        .rawQuery('SELECT SUM(price) AS sum FROM expense WHERE date > $micro');
+    try {
+      return maps[0]['sum'];
+    } catch (ex) {
+      return 0;
+    }
+  }
+
   Future<void> updateExpense(Expense expense) async {
     await db.update('expense', expense.toMap(),
         where: 'id = ?', whereArgs: [expense.id]);
