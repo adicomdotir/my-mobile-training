@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:first_flutter/my_money_app/models/home_report_model.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -78,6 +79,17 @@ class DatabaseHelper {
     } catch (ex) {
       return 0;
     }
+  }
+
+  Future<List<HomeReportModel>> getAllExpenseByCategoryAfterTime(int micro) async {
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        'SELECT SUM(price) AS price, category.title AS title, category.color AS color FROM expense INNER JOIN category ON categoryid = category.id WHERE date > $micro GROUP BY categoryid');
+    return List.generate(
+        maps.length,
+        (idx) => HomeReportModel(
+            title: maps[idx]['title'] ?? '',
+            color: maps[idx]['color'] ?? '',
+            price: maps[idx]['price'] ?? 0,));
   }
 
   Future<void> updateExpense(Expense expense) async {
