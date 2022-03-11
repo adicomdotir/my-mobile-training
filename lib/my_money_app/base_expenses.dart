@@ -4,6 +4,7 @@ import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:first_flutter/my_money_app/category.dart';
 import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class BaseExpense extends StatefulWidget {
   BaseExpense({Key? key}) : super(key: key);
@@ -41,6 +42,7 @@ class _BaseExpenseState extends State<BaseExpense> {
 
   @override
   Widget build(BuildContext context) {
+    final numberFormat = NumberFormat("#,###", "en_US");
     return Scaffold(
         appBar: AppBar(
           title: Text('Expenses'),
@@ -64,58 +66,70 @@ class _BaseExpenseState extends State<BaseExpense> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 25,
-                        width: 10,
-                        color: convertHexColorToRgb(expenseList[index].categoryColor ?? ''),
-                      ),
-                      SizedBox(width: 16,),
-                      Expanded(
-                        child: Container(
-                          child: GestureDetector(
-                            child: Row(
-                              children: [
-                                Text(
-                                  '${expenseList[index].title}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Column(
-                                  children: [
-                                    Text('${expenseList[index].price}'),
-                                    Text(
-                                        '${millisecToDate(expenseList[index].date)}')
-                                  ],
-                                ),
-                                SizedBox(
-                                  width: 32,
-                                ),
-                                Text('${expenseList[index].categoryTitle}')
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(
-                                      builder: (builder) =>
-                                          AddEditExpenseScreen(
-                                            expense: expenseList[index],
-                                          )))
-                                  .then((value) => dbSection());
-                            },
+                      Row(
+                        children: [
+                          Container(
+                            height: 25,
+                            width: 10,
+                            color: convertHexColorToRgb(
+                                expenseList[index].categoryColor ?? ''),
                           ),
-                        ),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          Container(
+                            child: GestureDetector(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    '${expenseList[index].title}',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                      '\$ ${numberFormat.format(int.parse(expenseList[index].price))}',
+                                      style: TextStyle(fontSize: 16)),
+                                  SizedBox(
+                                    height: 4,
+                                  ),
+                                  Text(
+                                      '${millisecToDate(expenseList[index].date)}',
+                                      style: TextStyle(fontSize: 16))
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (builder) =>
+                                            AddEditExpenseScreen(
+                                              expense: expenseList[index],
+                                            )))
+                                    .then((value) => dbSection());
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      GestureDetector(
-                          onTap: () {
-                            deleteId = expenseList[index].id ?? 0;
-                            _showMyDialog().then((value) => dbSection());
-                          },
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.redAccent,
-                          ))
+                      Row(
+                        children: [
+                          Text('${expenseList[index].categoryTitle}'),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          GestureDetector(
+                              onTap: () {
+                                deleteId = expenseList[index].id ?? 0;
+                                _showMyDialog().then((value) => dbSection());
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                color: Colors.redAccent,
+                              )),
+                        ],
+                      )
                     ],
                   ),
                 ),
