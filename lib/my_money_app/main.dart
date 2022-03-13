@@ -11,6 +11,19 @@ import 'add_edit_expense_screen.dart';
 void main(List<String> args) {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
+    theme: ThemeData.light().copyWith(
+      primaryColor: Color(0xFF001940),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            onPrimary: Color(0xFFfbeb00),
+            primary: Color(0xFF001940),
+          ),
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: Color(0xFFfbeb00),
+          foregroundColor: Color(0xFF001940),
+        )
+    ),
     home: HomePage(),
   ));
 }
@@ -136,7 +149,10 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 32,
             ),
-            Text('This month expenses filter by category', style: TextStyle(fontSize: 20),),
+            Text(
+              'This month expenses filter by category',
+              style: TextStyle(fontSize: 20),
+            ),
             SizedBox(
               height: 16,
             ),

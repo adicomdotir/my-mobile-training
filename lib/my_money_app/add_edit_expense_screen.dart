@@ -25,7 +25,8 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     _titleCtrl.text = widget.expense?.title ?? '';
     _priceCtrl.text = widget.expense?.price ?? '';
     categoryValue = widget.expense?.categoryId.toString() ?? '';
-    selectedDate = DateTime.fromMicrosecondsSinceEpoch(widget.expense?.date ?? DateTime.now().microsecondsSinceEpoch);
+    selectedDate = DateTime.fromMicrosecondsSinceEpoch(
+        widget.expense?.date ?? DateTime.now().microsecondsSinceEpoch);
     super.initState();
   }
 
@@ -63,7 +64,8 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: widget.expense == null ? Text('Add Expense') : Text('Edit Expense'),
+        title:
+            widget.expense == null ? Text('Add Expense') : Text('Edit Expense'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -163,7 +165,14 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             ),
             ElevatedButton(
                 onPressed: () {
-                  insertDbSection();
+                  if (_titleCtrl.text.isEmpty ||
+                      _priceCtrl.text.isEmpty ||
+                      categoryValue.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Please enter all field')));
+                  } else {
+                    insertDbSection();
+                  }
                 },
                 child: widget.expense == null ? Text('Save') : Text('Update'))
           ],
