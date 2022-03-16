@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:first_flutter/my_money_app/base_category.dart';
 import 'package:first_flutter/my_money_app/base_expenses.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
@@ -5,15 +8,15 @@ import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:first_flutter/my_money_app/models/home_report_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
+import 'package:file_picker/file_picker.dart';
 import 'add_edit_expense_screen.dart';
 
 void main(List<String> args) {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
     theme: ThemeData.light().copyWith(
-      primaryColor: Color(0xFF001940),
-      elevatedButtonTheme: ElevatedButtonThemeData(
+        primaryColor: Color(0xFF001940),
+        elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             onPrimary: Color(0xFFfbeb00),
             primary: Color(0xFF001940),
@@ -22,8 +25,7 @@ void main(List<String> args) {
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: Color(0xFFfbeb00),
           foregroundColor: Color(0xFF001940),
-        )
-    ),
+        )),
     home: HomePage(),
   ));
 }
@@ -85,42 +87,57 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       drawer: Drawer(
-        child: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 32,
+        child: Container(
+          color: Theme.of(context).primaryColor,
+          child: SafeArea(
+            child: Container(
+              color: Colors.white,
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 32,
+                  ),
+                  Text(
+                    'Menu',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                  ),
+                  Divider(
+                    thickness: 1,
+                    height: 32,
+                    endIndent: 32,
+                    indent: 32,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (builder) => BaseCategory()))
+                            .then((value) => dbSection());
+                      },
+                      child: Text('Categories')),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                                builder: (builder) => BaseExpense()))
+                            .then((value) => dbSection());
+                      },
+                      child: Text('Expenses')),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (builder) => RestoreScreen()));
+                      },
+                      child: Text('Restore Expenses'))
+                ],
               ),
-              Text(
-                'Menu',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              ),
-              Divider(
-                thickness: 1,
-                height: 32,
-                endIndent: 32,
-                indent: 32,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (builder) => BaseCategory()))
-                        .then((value) => dbSection());
-                  },
-                  child: Text('Categories')),
-              SizedBox(
-                height: 4,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (builder) => BaseExpense()))
-                        .then((value) => dbSection());
-                  },
-                  child: Text('Expenses'))
-            ],
+            ),
           ),
         ),
       ),
@@ -150,8 +167,8 @@ class _HomePageState extends State<HomePage> {
               height: 32,
             ),
             Text(
-              'This month expenses filter by category',
-              style: TextStyle(fontSize: 20),
+              'This month expenses filter by category'.toUpperCase(),
+              style: TextStyle(fontSize: 18),
             ),
             SizedBox(
               height: 16,
@@ -239,5 +256,53 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+}
+
+class RestoreScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Restore Expenses'),
+      ),
+      body: Center(
+        child: GestureDetector(
+            onTap: () {
+              filePicker(context);
+            },
+            child: Text('Center')),
+      ),
+    );
+  }
+
+  void filePicker(BuildContext context) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      file
+          .openRead()
+          .map(utf8.decode)
+          .transform(new LineSplitter())
+          .forEach((line) {
+        var splitedLine = line.split(',');
+        Expense expense = Expense(
+            title: splitedLine[0],
+            price: splitedLine[1],
+            categoryId: int.parse(splitedLine[2]),
+            date: int.parse(splitedLine[3]));
+        insertDbSection(expense, context);
+      });
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  void insertDbSection(Expense expense, BuildContext context) async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    await databaseHelper.insertExpense(expense);
+    // Navigator.of(context).pop();
   }
 }

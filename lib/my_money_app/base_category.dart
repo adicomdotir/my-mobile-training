@@ -27,6 +27,9 @@ class _BaseCategoryState extends State<BaseCategory> {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     List<Category> result = await databaseHelper.getAllCategory();
+    result.forEach((element) {
+      print(element);
+    });
     setState(() {
       categoryList = result;
     });

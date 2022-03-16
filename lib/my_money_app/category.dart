@@ -13,4 +13,9 @@ class Category {
   Map<String, dynamic> toMap() {
     return {'id': id, 'title': title, 'color': color};
   }
+
+  @override
+  String toString() {
+    return '[${this.id}, ${this.title}]';
+  }
 }
