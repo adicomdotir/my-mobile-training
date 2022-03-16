@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'add_edit_expense_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 void main(List<String> args) {
   runApp(MaterialApp(
@@ -298,17 +299,25 @@ class RestoreScreen extends StatelessWidget {
           .map(utf8.decode)
           .transform(new LineSplitter())
           .forEach((line) {
+            print(line);
         var splitedLine = line.split(',');
         Expense expense = Expense(
             title: splitedLine[0],
             price: splitedLine[1],
             categoryId: int.parse(splitedLine[2]),
-            date: int.parse(splitedLine[3]));
+            date: convertStringDateToMilli(splitedLine[3]));
         insertDbSection(expense, context);
       });
     } else {
       // User canceled the picker
     }
+  }
+
+  int convertStringDateToMilli(String date) {
+    List<String> splitedDate = date.split('/');
+    print(splitedDate);
+    Jalali dateTime = Jalali(int.parse(splitedDate[0]), int.parse(splitedDate[1]), int.parse(splitedDate[2]));
+    return dateTime.toDateTime().microsecondsSinceEpoch;
   }
 
   void insertDbSection(Expense expense, BuildContext context) async {

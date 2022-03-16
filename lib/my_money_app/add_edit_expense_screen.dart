@@ -85,6 +85,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             ),
             TextField(
                 controller: _priceCtrl,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
