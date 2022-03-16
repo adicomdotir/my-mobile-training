@@ -65,7 +65,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     return Scaffold(
       appBar: AppBar(
         title:
-            widget.expense == null ? Text('Add Expense') : Text('Edit Expense'),
+            widget.expense == null ? Text('هزینه جدید') : Text('ویرایش هزینه'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -76,7 +76,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
-                  labelText: "Title",
+                  labelText: "عنوان",
                 )),
             SizedBox(
               height: 16,
@@ -86,7 +86,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
-                  labelText: "Price",
+                  labelText: "قیمت",
                 )),
             SizedBox(
               height: 16,
@@ -99,7 +99,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                     _selectDate(context);
                   },
                   child: Text(
-                    'Select Date',
+                    'انتخاب تاریخ',
                   ),
                 ),
                 Text(
@@ -115,7 +115,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                 Expanded(
                   child: InputDecorator(
                     decoration: InputDecoration(
-                      labelText: 'Category',
+                      labelText: 'دسته',
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 12.0, vertical: 0.0),
                       border: OutlineInputBorder(
@@ -169,12 +169,12 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                       _priceCtrl.text.isEmpty ||
                       categoryValue.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please enter all field')));
+                        SnackBar(content: Text('لطفا تمامی فیلدها را وارد نمایید')));
                   } else {
                     insertDbSection();
                   }
                 },
-                child: widget.expense == null ? Text('Save') : Text('Update'))
+                child: widget.expense == null ? Text('ذخیره') : Text('بروز رسانی'))
           ],
         ),
       ),

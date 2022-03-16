@@ -31,8 +31,8 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
     return Scaffold(
       appBar: AppBar(
         title: widget.category == null
-            ? Text('Add Category')
-            : Text('Edit Category'),
+            ? Text('دسته جدید')
+            : Text('ویرایش دسته'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -43,7 +43,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
-                  labelText: "Title",
+                  labelText: "عنوان",
                 )),
             SizedBox(
               height: 16,
@@ -63,7 +63,7 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16)),
-                        labelText: "Color",
+                        labelText: "رنگ",
                       )),
                 ),
                 SizedBox(width: 16),
@@ -84,12 +84,12 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
                 onPressed: () {
                   if (_titleCtrl.text.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please enter title')));
+                        SnackBar(content: Text('لطفا عنوان را وارد نمایید')));
                   } else {
                     dbSection();
                   }
                 },
-                child: widget.category == null ? Text('Save') : Text('Update'))
+                child: widget.category == null ? Text('ذخیره') : Text('بروز رسانی'))
           ],
         ),
       ),

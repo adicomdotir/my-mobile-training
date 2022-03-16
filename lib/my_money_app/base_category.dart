@@ -47,7 +47,7 @@ class _BaseCategoryState extends State<BaseCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Categories'),
+          title: Text('دسته ها'),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -113,24 +113,24 @@ class _BaseCategoryState extends State<BaseCategory> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Category'),
+          title: Text('پاک کردن دسته'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Are your sure?'),
+                Text('آیا شما مطمئن هستید؟'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Okey'),
+              child: Text('بله'),
               onPressed: () {
                 dbDeleteSection();
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text('خیر'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

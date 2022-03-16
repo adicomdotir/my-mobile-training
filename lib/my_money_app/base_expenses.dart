@@ -42,10 +42,10 @@ class _BaseExpenseState extends State<BaseExpense> {
 
   @override
   Widget build(BuildContext context) {
-    final numberFormat = NumberFormat("#,###", "en_US");
+    final numberFormat = NumberFormat("#,###", "fa_IR");
     return Scaffold(
         appBar: AppBar(
-          title: Text('Expenses'),
+          title: Text('هزینه ها'),
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -90,7 +90,7 @@ class _BaseExpenseState extends State<BaseExpense> {
                                     height: 4,
                                   ),
                                   Text(
-                                      '\$ ${numberFormat.format(int.parse(expenseList[index].price))}',
+                                      '${numberFormat.format(int.parse(expenseList[index].price))} تومان',
                                       style: TextStyle(fontSize: 16)),
                                   SizedBox(
                                     height: 4,
@@ -148,24 +148,24 @@ class _BaseExpenseState extends State<BaseExpense> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Expense'),
+          title: Text('حذف کردن هزینه'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text('Are your sure?'),
+                Text('آیا مطمئن هستید؟'),
               ],
             ),
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Okey'),
+              child: Text('بله'),
               onPressed: () {
                 dbDeleteSection();
               },
             ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text('خیر'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

@@ -10,11 +10,23 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'add_edit_expense_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main(List<String> args) {
   runApp(MaterialApp(
+    localizationsDelegates: [
+      GlobalCupertinoLocalizations.delegate,
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+    ],
+    supportedLocales: [
+      Locale("fa", "IR"),
+    ],
+    locale: Locale("fa", "IR"),
     debugShowCheckedModeBanner: false,
-    theme: ThemeData.light().copyWith(
+    theme: ThemeData(
+      fontFamily: 'IranYekan'
+    ).copyWith(
         primaryColor: Color(0xFF001940),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -98,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                     height: 32,
                   ),
                   Text(
-                    'Menu',
+                    'منو',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                   ),
                   Divider(
@@ -114,7 +126,7 @@ class _HomePageState extends State<HomePage> {
                                 builder: (builder) => BaseCategory()))
                             .then((value) => dbSection());
                       },
-                      child: Text('Categories')),
+                      child: Text(' دسته ها')),
                   SizedBox(
                     height: 4,
                   ),
@@ -125,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                                 builder: (builder) => BaseExpense()))
                             .then((value) => dbSection());
                       },
-                      child: Text('Expenses')),
+                      child: Text('هزینه ها')),
                   SizedBox(
                     height: 4,
                   ),
@@ -134,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (builder) => RestoreScreen()));
                       },
-                      child: Text('Restore Expenses'))
+                      child: Text('اضافه کردن هزینه ها با فایل'))
                 ],
               ),
             ),
@@ -142,7 +154,7 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       appBar: AppBar(
-        title: Text('My Money App'),
+        title: Text(' پول من'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -150,24 +162,24 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 16,
             ),
-            expenseDurationBox('Today Expense', dayPrice),
+            expenseDurationBox('هزینه امروز', dayPrice),
             SizedBox(
               height: 16,
             ),
-            expenseDurationBox('Last 7 days Expense', weekPrice),
+            expenseDurationBox('هزینه 7 روز گذشته', weekPrice),
             SizedBox(
               height: 16,
             ),
-            expenseDurationBox('This Month Expense', thisMonthPrice),
+            expenseDurationBox('هزینه این ماه', thisMonthPrice),
             SizedBox(
               height: 16,
             ),
-            expenseDurationBox('Last 30 days Expense', monthPrice),
+            expenseDurationBox('هزینه 30 روز گذشته', monthPrice),
             SizedBox(
               height: 32,
             ),
             Text(
-              'This month expenses filter by category'.toUpperCase(),
+              'هزینه های این ماه با دسته بندی'.toUpperCase(),
               style: TextStyle(fontSize: 18),
             ),
             SizedBox(
@@ -191,7 +203,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget reportModelWidget(int index) {
-    final numberFormat = NumberFormat("#,###", "en_US");
+    final numberFormat = NumberFormat("#,###", "fa_IR");
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       padding: EdgeInsets.all(8),
@@ -216,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(fontSize: 20),
                     ),
                     Text(
-                      '\$ ${numberFormat.format(reportModels[index].price)}',
+                      '${numberFormat.format(reportModels[index].price)} تومان',
                       style: TextStyle(fontSize: 20),
                     ),
                   ],
@@ -235,7 +247,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget expenseDurationBox(String innerText, int price) {
-    final numberFormat = NumberFormat("#,###", "en_US");
+    final numberFormat = NumberFormat("#,###", "fa_IR");
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 4),
       padding: EdgeInsets.all(8),
@@ -250,7 +262,7 @@ class _HomePageState extends State<HomePage> {
             style: TextStyle(fontSize: 16),
           ),
           Text(
-            '\$ ${numberFormat.format(price)}',
+            '${numberFormat.format(price)} تومان',
             style: TextStyle(fontSize: 18),
           ),
         ],
@@ -264,14 +276,14 @@ class RestoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Restore Expenses'),
+        title: Text('اضافه کردن هزینه با فایل'),
       ),
       body: Center(
-        child: GestureDetector(
-            onTap: () {
+        child: ElevatedButton(
+            onPressed: () {
               filePicker(context);
             },
-            child: Text('Center')),
+            child:  Text(' اضافه کن')),
       ),
     );
   }
