@@ -2,6 +2,7 @@ import 'package:first_flutter/my_money_app/add_edit_category_screen.dart';
 import 'package:first_flutter/my_money_app/category.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class AddEditExpenseScreen extends StatefulWidget {
   Expense? expense;
@@ -62,6 +63,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Jalali jalaliDate = Jalali.fromDateTime(selectedDate);
     return Scaffold(
       appBar: AppBar(
         title:
@@ -103,7 +105,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   ),
                 ),
                 Text(
-                  "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}",
+                  "${jalaliDate.year}/${jalaliDate.month}/${jalaliDate.day}",
                 )
               ],
             ),
@@ -168,13 +170,14 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
                   if (_titleCtrl.text.isEmpty ||
                       _priceCtrl.text.isEmpty ||
                       categoryValue.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('لطفا تمامی فیلدها را وارد نمایید')));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('لطفا تمامی فیلدها را وارد نمایید')));
                   } else {
                     insertDbSection();
                   }
                 },
-                child: widget.expense == null ? Text('ذخیره') : Text('بروز رسانی'))
+                child:
+                    widget.expense == null ? Text('ذخیره') : Text('بروز رسانی'))
           ],
         ),
       ),
@@ -182,15 +185,23 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
+    Jalali? selected = await showPersianDatePicker(
       context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2025),
+      initialDate: Jalali.fromDateTime(selectedDate),
+      firstDate: Jalali(1370, 1),
+      lastDate: Jalali(1450, 1),
     );
-    if (selected != null && selected != selectedDate)
+    if (selected != null && selected != selectedDate) {
       setState(() {
-        selectedDate = selected;
+        selectedDate = selected.toDateTime();
       });
+    }
+
+    // final DateTime? selected = await showDatePicker(
+    //   context: context,
+    //   initialDate: selectedDate,
+    //   firstDate: DateTime(2010),
+    //   lastDate: DateTime(2025),
+    // );
   }
 }

@@ -52,6 +52,7 @@ dev_dependencies:
   flutter_bloc: ^8.0.0
   bloc: ^8.0.0
   file_picker: ^4.4.0
+  persian_datetime_picker: ^2.4.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

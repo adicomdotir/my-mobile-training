@@ -5,6 +5,7 @@ import 'package:first_flutter/my_money_app/category.dart';
 import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 
 class BaseExpense extends StatefulWidget {
   BaseExpense({Key? key}) : super(key: key);
@@ -139,7 +140,8 @@ class _BaseExpenseState extends State<BaseExpense> {
 
   String millisecToDate(int millisec) {
     DateTime dateTime = DateTime.fromMicrosecondsSinceEpoch(millisec);
-    return "${dateTime.day}/${dateTime.month}/${dateTime.year}";
+    Jalali jalali = Jalali.fromDateTime(dateTime);
+    return "${jalali.year}/${jalali.month}/${jalali.day}";
   }
 
   Future<void> _showMyDialog() async {
