@@ -6,6 +6,7 @@ import 'package:first_flutter/my_money_app/base_expenses.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:first_flutter/my_money_app/models/home_report_model.dart';
+import 'package:first_flutter/my_money_app/report_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,20 +26,10 @@ void main(List<String> args) {
     ],
     locale: Locale("fa", "IR"),
     debugShowCheckedModeBanner: false,
+    themeMode: ThemeMode.dark,
     theme: ThemeData(
-      fontFamily: 'IranYekan'
-    ).copyWith(
-        primaryColor: Color(0xFF001940),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            onPrimary: Color(0xFFfbeb00),
-            primary: Color(0xFF001940),
-          ),
-        ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFFfbeb00),
-          foregroundColor: Color(0xFF001940),
-        )),
+        fontFamily: 'IranYekan',
+    ),
     home: HomePage(),
   ));
 }
@@ -139,6 +130,17 @@ class _HomePageState extends State<HomePage> {
                             .then((value) => dbSection());
                       },
                       child: Text('هزینه ها')),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(
+                            builder: (builder) => ReportScreen()))
+                            .then((value) => dbSection());
+                      },
+                      child: Text('گزارش')),
                   SizedBox(
                     height: 4,
                   ),
@@ -284,7 +286,7 @@ class RestoreScreen extends StatelessWidget {
             onPressed: () {
               filePicker(context);
             },
-            child:  Text(' اضافه کن')),
+            child: Text(' اضافه کن')),
       ),
     );
   }
@@ -299,7 +301,6 @@ class RestoreScreen extends StatelessWidget {
           .map(utf8.decode)
           .transform(new LineSplitter())
           .forEach((line) {
-            print(line);
         var splitedLine = line.split(',');
         Expense expense = Expense(
             title: splitedLine[0],
@@ -315,8 +316,8 @@ class RestoreScreen extends StatelessWidget {
 
   int convertStringDateToMilli(String date) {
     List<String> splitedDate = date.split('/');
-    print(splitedDate);
-    Jalali dateTime = Jalali(int.parse(splitedDate[0]), int.parse(splitedDate[1]), int.parse(splitedDate[2]));
+    Jalali dateTime = Jalali(int.parse(splitedDate[0]),
+        int.parse(splitedDate[1]), int.parse(splitedDate[2]));
     return dateTime.toDateTime().microsecondsSinceEpoch;
   }
 
