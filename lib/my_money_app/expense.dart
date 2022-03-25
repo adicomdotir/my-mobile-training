@@ -10,7 +10,7 @@ class Expense {
   int? id;
   final String title;
   final String price;
-  final int categoryId;
+  int categoryId;
   final int date;
   final String? categoryTitle;
   final String? categoryColor;
@@ -103,6 +103,16 @@ class DatabaseHelper {
 
   Future<void> insertCategory(Category category) async {
     await db.insert('category', category.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<int> insertCategoryIfNotExist(String categoryTitle) async {
+    List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM category WHERE title = \'$categoryTitle\'');
+    if (maps.length > 0) {
+      return maps[0]['id'];
+    }
+    Category category = Category(title: categoryTitle, color: 'ffffff');
+    return await db.insert('category', category.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 

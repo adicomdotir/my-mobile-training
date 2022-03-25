@@ -305,7 +305,8 @@ class RestoreScreen extends StatelessWidget {
         Expense expense = Expense(
             title: splitedLine[0],
             price: splitedLine[1],
-            categoryId: int.parse(splitedLine[2]),
+            categoryId: -1,
+            categoryTitle: splitedLine[2],
             date: convertStringDateToMilli(splitedLine[3]));
         insertDbSection(expense, context);
       });
@@ -324,6 +325,8 @@ class RestoreScreen extends StatelessWidget {
   void insertDbSection(Expense expense, BuildContext context) async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
+    int categoryId = await databaseHelper.insertCategoryIfNotExist(expense.categoryTitle ?? '');
+    expense.categoryId = categoryId;
     await databaseHelper.insertExpense(expense);
     // Navigator.of(context).pop();
   }
