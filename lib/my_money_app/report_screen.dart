@@ -45,26 +45,36 @@ class _ReportScreenState extends State<ReportScreen> {
     });
 
     final numberFormat = NumberFormat("#,###", "fa_IR");
-    TextStyle headerTextStyle = TextStyle(
-      fontSize: 24
-    );TextStyle bodyTextStyle = TextStyle(
-        fontSize: 20
-    );
+    TextStyle headerTextStyle = TextStyle(fontSize: 24);
+    TextStyle bodyTextStyle = TextStyle(fontSize: 18);
 
     map.forEach((key, value) {
-      Column result = Column(children: [],);
+      Column result = Column(
+        children: [],
+      );
       Map<String, String> newValue = value;
       newValue.forEach((key, value) {
         if (result.children.length != 0) {
-          result.children.add(SizedBox(height: 4,));
+          result.children.add(SizedBox(
+            height: 4,
+          ));
         }
         if (key == 'title') {
-          result.children.add(Text('$value', style: headerTextStyle,));
+          result.children.add(Text(
+            '$value',
+            style: headerTextStyle,
+          ));
         } else if (key == 'sum') {
-          var tmp = 'کل هزینه' + ' ' + numberFormat.format(int.parse(value));
-          result.children.add(Text(tmp, style: bodyTextStyle,));
+          result.children.add(SizedBox(height: 8));
+          var tmp = 'کل هزینه' + ' ' + numberFormat.format(int.parse(value)) + ' ' + 'تومان';
+          result.children.add(Text(
+            tmp,
+            style: bodyTextStyle,
+          ));
+          result.children.add(SizedBox(height: 16));
+          result.children.add(Text('هزینه ها بر اساس دسته'));
         } else {
-          var tmp = '${key} ${numberFormat.format(int.parse(value))}';
+          var tmp = '${key} ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
           result.children.add(Text(tmp));
         }
       });
@@ -85,29 +95,29 @@ class _ReportScreenState extends State<ReportScreen> {
     Jalali jalali = Jalali.fromDateTime(dateTime);
     switch (jalali.month) {
       case 1:
-        return jalali.year.toString() + ' فروردین';
+        return ' فروردین' + ' ' + jalali.year.toString();
       case 2:
-        return jalali.year.toString() + ' اردیبهشت';
+        return ' اردیبهشت' + ' ' + jalali.year.toString();
       case 3:
-        return jalali.year.toString() + ' خرداد';
+        return ' خرداد' + ' ' + jalali.year.toString();
       case 4:
-        return jalali.year.toString() + ' تیر';
+        return ' تیر' + ' ' + jalali.year.toString();
       case 5:
-        return jalali.year.toString() + ' مرداد';
+        return ' مرداد' + ' ' + jalali.year.toString();
       case 6:
-        return jalali.year.toString() + 'شهریور ';
+        return 'شهریور ' + ' ' + jalali.year.toString();
       case 7:
-        return jalali.year.toString() + 'مهر ';
+        return 'مهر ' + ' ' + jalali.year.toString();
       case 8:
-        return jalali.year.toString() + ' آبان';
+        return ' آبان' + ' ' + jalali.year.toString();
       case 9:
-        return jalali.year.toString() + ' آذر';
+        return ' آذر' + ' ' + jalali.year.toString();
       case 10:
-        return jalali.year.toString() + ' دی';
+        return ' دی' + ' ' + jalali.year.toString();
       case 11:
-        return jalali.year.toString() + ' بهمن';
+        return ' بهمن' + ' ' + jalali.year.toString();
       case 12:
-        return jalali.year.toString() + ' اسفند';
+        return ' اسفند' + ' ' + jalali.year.toString();
       default:
         return '';
     }
@@ -123,10 +133,13 @@ class _ReportScreenState extends State<ReportScreen> {
           child: ListView.builder(
               itemCount: myList.length,
               itemBuilder: (ctx, idx) {
-                return Padding(
+                return Container(
                   padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
                   child: Card(
-                    child: myList[idx],
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: myList[idx],
+                    ),
                   ),
                 );
               })),
