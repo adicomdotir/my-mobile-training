@@ -101,17 +101,7 @@ class DatabaseHelper {
     await db.delete('expense', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<void> insertCategory(Category category) async {
-    await db.insert('category', category.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
-  }
-
-  Future<int> insertCategoryIfNotExist(String categoryTitle) async {
-    List<Map<String, dynamic>> maps = await db.rawQuery('SELECT * FROM category WHERE title = \'$categoryTitle\'');
-    if (maps.length > 0) {
-      return maps[0]['id'];
-    }
-    Category category = Category(title: categoryTitle, color: 'ffffff');
+  Future<int> insertCategory(Category category) async {
     return await db.insert('category', category.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
