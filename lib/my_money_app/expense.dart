@@ -58,7 +58,7 @@ class DatabaseHelper {
   Future<List<Expense>> getAllExpense() async {
     // final List<Map<String, dynamic>> maps = await db.query('expense');
     final List<Map<String, dynamic>> maps = await db.rawQuery(
-        'SELECT expense.*, category.title AS categoryTitle, category.color AS categoryColor FROM expense INNER JOIN category on category.id = categoryId');
+        'SELECT expense.*, category.title AS categoryTitle, category.color AS categoryColor FROM expense INNER JOIN category on category.id = categoryId ORDER BY date DESC');
     return List.generate(
         maps.length,
         (idx) => Expense(
