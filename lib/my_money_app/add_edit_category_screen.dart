@@ -38,6 +38,12 @@ class _AddEditCategoryScreenState extends State<AddEditCategoryScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           children: [
+            widget.category == null
+            ? Container()
+            : Container(
+              width: double.maxFinite,
+              margin: EdgeInsets.only(bottom: 16),
+              child: Text('کد' + ': ${widget.category?.id}', style: TextStyle(color: Colors.grey),)),
             TextField(
                 controller: _titleCtrl,
                 decoration: InputDecoration(
