@@ -61,7 +61,9 @@ class _HomePageState extends State<HomePage> {
     var today = DateTime(tmpDate.year, tmpDate.month, tmpDate.day);
     var week = DateTime(tmpDate.year, tmpDate.month, tmpDate.day - 7);
     var month = DateTime(tmpDate.year, tmpDate.month - 1, tmpDate.day);
-    var thisMonth = DateTime(tmpDate.year, tmpDate.month);
+    var jalaliDate = Jalali.now();
+    var tmpJalaliDate = Jalali(jalaliDate.year, jalaliDate.month);
+    var thisMonth = tmpJalaliDate.toDateTime();
 
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
