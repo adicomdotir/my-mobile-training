@@ -15,21 +15,42 @@ class BaseExpense extends StatefulWidget {
 }
 
 class _BaseExpenseState extends State<BaseExpense> {
+  late ScrollController _scrollController;
   List<Expense> expenseList = [];
   int deleteId = 0;
+  int page = 0;
 
   @override
   void initState() {
     dbSection();
+    _scrollController = ScrollController()
+      ..addListener(_scrollListener);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_scrollListener);
+    super.dispose();
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      page += 1;
+      dbSection();
+    }
   }
 
   void dbSection() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
-    List<Expense> result = await databaseHelper.getAllExpense();
+    List<Expense> result = await databaseHelper.getAllExpenseWithPage(page);
     setState(() {
-      expenseList = result;
+      if (page == 0) {
+        expenseList = result;
+      } else {
+        expenseList.addAll(result);
+      }
     });
   }
 
@@ -47,6 +68,17 @@ class _BaseExpenseState extends State<BaseExpense> {
     return Scaffold(
         appBar: AppBar(
           title: Text('هزینه ها'),
+          actions: [
+            InkWell(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+              child: Icon(Icons.filter_alt_outlined),
+              onTap: () {},
+            ),
+            SizedBox(
+              width: 16,
+            )
+          ],
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
@@ -60,6 +92,7 @@ class _BaseExpenseState extends State<BaseExpense> {
         body: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
             itemCount: expenseList.length,
+            controller: _scrollController,
             itemBuilder: (BuildContext context, int index) {
               return Card(
                 child: Container(
