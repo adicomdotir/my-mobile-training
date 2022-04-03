@@ -21,7 +21,7 @@ class _BaseExpenseState extends State<BaseExpense> {
   int page = 0;
   String categoryValue = '-1';
   List<Category> categoryTitle = [
-    Category(id: -1, title: 'All', color: 'FFFFFF')
+    Category(id: -1, title: 'همه', color: 'FFFFFF')
   ];
 
   @override
@@ -56,6 +56,23 @@ class _BaseExpenseState extends State<BaseExpense> {
         expenseList.addAll(result);
       }
     });
+    List<Category> categoryList = await databaseHelper.getAllCategory();
+    categoryTitle.addAll(categoryList);
+  }
+
+  void dbFilterSection() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    List<Expense> result = await databaseHelper.getAllExpenseWithFilter(int.parse(categoryValue), DateTime(2019, 1, 1).microsecondsSinceEpoch, DateTime.now().microsecondsSinceEpoch);
+    setState(() {
+      if (page == 0) {
+        expenseList = result;
+      } else {
+        expenseList.addAll(result);
+      }
+    });
+    List<Category> categoryList = await databaseHelper.getAllCategory();
+    categoryTitle.addAll(categoryList);
   }
 
   void dbDeleteSection() async {
@@ -218,11 +235,6 @@ class _BaseExpenseState extends State<BaseExpense> {
   }
 
   Future<void> _showFilterDialog() async {
-    DatabaseHelper databaseHelper = DatabaseHelper();
-    await databaseHelper.init();
-    List<Category> categoryList = await databaseHelper.getAllCategory();
-    categoryTitle.addAll(categoryList);
-
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -247,6 +259,9 @@ class _BaseExpenseState extends State<BaseExpense> {
                       Text('تا تاریخ'),
                       TextButton(onPressed: () {}, child: Text('1400/01/01')),
                     ],
+                  ),
+                  SizedBox(
+                    height: 8,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,7 +306,10 @@ class _BaseExpenseState extends State<BaseExpense> {
             actions: <Widget>[
               TextButton(
                 child: Text('اعمال'),
-                onPressed: () {},
+                onPressed: () {
+                  dbFilterSection();
+                  Navigator.of(context).pop();
+                },
               ),
               TextButton(
                 child: Text('لغو'),
