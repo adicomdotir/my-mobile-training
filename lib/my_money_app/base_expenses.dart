@@ -19,12 +19,15 @@ class _BaseExpenseState extends State<BaseExpense> {
   List<Expense> expenseList = [];
   int deleteId = 0;
   int page = 0;
+  String categoryValue = '-1';
+  List<Category> categoryTitle = [
+    Category(id: -1, title: 'All', color: 'FFFFFF')
+  ];
 
   @override
   void initState() {
     dbSection();
-    _scrollController = ScrollController()
-      ..addListener(_scrollListener);
+    _scrollController = ScrollController()..addListener(_scrollListener);
     super.initState();
   }
 
@@ -35,7 +38,8 @@ class _BaseExpenseState extends State<BaseExpense> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
       page += 1;
       dbSection();
     }
@@ -73,7 +77,9 @@ class _BaseExpenseState extends State<BaseExpense> {
               highlightColor: Colors.transparent,
               splashColor: Colors.transparent,
               child: Icon(Icons.filter_alt_outlined),
-              onTap: () {},
+              onTap: () {
+                _showFilterDialog();
+              },
             ),
             SizedBox(
               width: 16,
@@ -207,6 +213,95 @@ class _BaseExpenseState extends State<BaseExpense> {
             ),
           ],
         );
+      },
+    );
+  }
+
+  Future<void> _showFilterDialog() async {
+    DatabaseHelper databaseHelper = DatabaseHelper();
+    await databaseHelper.init();
+    List<Category> categoryList = await databaseHelper.getAllCategory();
+    categoryTitle.addAll(categoryList);
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (ctx, StateSetter setState) {
+          return AlertDialog(
+            title: Text('فیلتر'),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('از تاریخ'),
+                      TextButton(onPressed: () {}, child: Text('1400/01/01')),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('تا تاریخ'),
+                      TextButton(onPressed: () {}, child: Text('1400/01/01')),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: InputDecorator(
+                          decoration: InputDecoration(
+                            labelText: 'دسته',
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 0.0),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16)),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton<String>(
+                              value: categoryValue,
+                              icon: const Icon(Icons.arrow_drop_down),
+                              iconSize: 24,
+                              elevation: 16,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  categoryValue = newValue!;
+                                });
+                              },
+                              items: categoryTitle
+                                  .map<DropdownMenuItem<String>>(
+                                      (Category category) {
+                                return DropdownMenuItem<String>(
+                                  value: category.id.toString(),
+                                  child: Text(category.title),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('اعمال'),
+                onPressed: () {},
+              ),
+              TextButton(
+                child: Text('لغو'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        });
       },
     );
   }
