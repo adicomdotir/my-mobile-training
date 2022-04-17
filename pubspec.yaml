@@ -54,6 +54,7 @@ dev_dependencies:
   bloc_test: ^9.0.3
   file_picker: ^4.4.0
   persian_datetime_picker: ^2.4.0
+  equatable: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
