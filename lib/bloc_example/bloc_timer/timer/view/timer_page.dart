@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../ticker.dart';
+import 'background.dart';
+import '../../actions.dart' as MyActions;
 
 class TimerPage extends StatelessWidget {
   const TimerPage({Key? key}) : super(key: key);
@@ -32,7 +34,7 @@ class TimerView extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 100.0),
                 child: Center(child: TimerText()),
               ),
-              Actions(),
+              MyActions.Actions(),
             ],
           ),
         ],

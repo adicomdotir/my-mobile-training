@@ -1,6 +1,6 @@
 import 'package:first_flutter/bloc_example/bloc_timer/bloc/timer_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Actions extends StatelessWidget {
   const Actions({Key? key}) : super(key: key);
