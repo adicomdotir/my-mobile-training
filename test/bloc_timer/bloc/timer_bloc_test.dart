@@ -11,8 +11,9 @@ void main() {
     late Ticker ticker;
 
     setUp(() {
+
       ticker = MockTicker();
-      when(() => ticker.tick(ticks: 5)).thenAnswer(
+      when(ticker.tick(ticks: 5)).thenAnswer(
         (_) => Stream<int>.fromIterable([5, 4, 3, 2, 1]),
       );
     });
