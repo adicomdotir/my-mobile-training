@@ -20,10 +20,16 @@ class _CardTemplatesState extends State<CardTemplates> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Headline'),
+        title: Text('Card Sample'),
         centerTitle: true,
       ),
-      body: Headline(),
+      body: Column(
+        children: [
+          Spacer(),
+          HeadlineSubtitle(),
+          Spacer(),
+        ],
+      ),
       backgroundColor: Colors.black54,
     );
   }
@@ -39,7 +45,6 @@ class Headline extends StatelessWidget {
     return Center(
       child: Container(
         width: 268,
-        height: 213,
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12), color: Colors.white),
@@ -70,6 +75,67 @@ class Headline extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                   color: Color(0xFF666666)),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HeadlineSubtitle extends StatelessWidget {
+  const HeadlineSubtitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 268,
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28),
+                      color: Color(0xFFDEDEDE)),
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Headline',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Text(
+                      'Subtitle',
+                      style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xFF666666)),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            SizedBox(height: 24,),
+            Text(
+                'Please add your content here. Keep it short and simple. And smile :) ',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF666666))),
           ],
         ),
       ),
