@@ -26,7 +26,7 @@ class _CardTemplatesState extends State<CardTemplates> {
       body: Column(
         children: [
           Spacer(),
-          HeadlineButton(),
+          HeadlineWithThreeTop(),
           Spacer(),
         ],
       ),
@@ -191,6 +191,70 @@ class HeadlineButton extends StatelessWidget {
                 ),
               ),
             )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HeadlineWithThreeTop extends StatelessWidget {
+  const HeadlineWithThreeTop({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 298,
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFFDEDEDE)),
+                ),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFFDEDEDE)),
+                ),
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFFDEDEDE)),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Text(
+              'Headline',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+                'Please add your content here. Keep it short and simple. And smile :) ',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF666666))),
           ],
         ),
       ),
