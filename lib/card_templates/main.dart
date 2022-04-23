@@ -26,7 +26,7 @@ class _CardTemplatesState extends State<CardTemplates> {
       body: Column(
         children: [
           Spacer(),
-          HeadlineSubtitle(),
+          HeadlineButton(),
           Spacer(),
         ],
       ),
@@ -129,13 +129,68 @@ class HeadlineSubtitle extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: 24,),
+            SizedBox(
+              height: 24,
+            ),
             Text(
                 'Please add your content here. Keep it short and simple. And smile :) ',
                 style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF666666))),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HeadlineButton extends StatelessWidget {
+  const HeadlineButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 268,
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Headline',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            Text(
+                'Please add your content here. Keep it short and simple. And smile :) ',
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF666666))),
+            SizedBox(
+              height: 24,
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Color(0xFF3C3C43)),
+                child: Text(
+                  'Button',
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
+            )
           ],
         ),
       ),
