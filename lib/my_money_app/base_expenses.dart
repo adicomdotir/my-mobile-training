@@ -23,6 +23,7 @@ class _BaseExpenseState extends State<BaseExpense> {
   List<Category> categoryTitle = [
     Category(id: -1, title: 'همه', color: 'FFFFFF')
   ];
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -63,7 +64,10 @@ class _BaseExpenseState extends State<BaseExpense> {
   void dbFilterSection() async {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
-    List<Expense> result = await databaseHelper.getAllExpenseWithFilter(int.parse(categoryValue), DateTime(2019, 1, 1).microsecondsSinceEpoch, DateTime.now().microsecondsSinceEpoch);
+    List<Expense> result = await databaseHelper.getAllExpenseWithFilter(
+        int.parse(categoryValue),
+        DateTime(2019, 1, 1).microsecondsSinceEpoch,
+        DateTime.now().microsecondsSinceEpoch);
     setState(() {
       if (page == 0) {
         expenseList = result;
@@ -250,7 +254,11 @@ class _BaseExpenseState extends State<BaseExpense> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('از تاریخ'),
-                      TextButton(onPressed: () {}, child: Text('1400/01/01')),
+                      TextButton(
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          child: Text('1400/01/01')),
                     ],
                   ),
                   Row(
@@ -322,5 +330,19 @@ class _BaseExpenseState extends State<BaseExpense> {
         });
       },
     );
+  }
+
+  _selectDate(BuildContext context) async {
+    Jalali? selected = await showPersianDatePicker(
+      context: context,
+      initialDate: Jalali.fromDateTime(selectedDate),
+      firstDate: Jalali(1370, 1),
+      lastDate: Jalali(1450, 1),
+    );
+    if (selected != null && selected != selectedDate) {
+      setState(() {
+        selectedDate = selected.toDateTime();
+      });
+    }
   }
 }

@@ -26,7 +26,7 @@ class _CardTemplatesState extends State<CardTemplates> {
       body: Column(
         children: [
           Spacer(),
-          HeadlineWithThreeTop(),
+          BigHeader(),
           Spacer(),
         ],
       ),
@@ -255,6 +255,52 @@ class HeadlineWithThreeTop extends StatelessWidget {
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF666666))),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BigHeader extends StatelessWidget {
+  const BigHeader({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 304,
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12), color: Colors.white),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 256,
+              height: 176,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Color(0xFFDEDEDE)),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Text('Headline',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                )),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              'Please add your content here. Keep it short and simple. And smile :) ',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF666666)),
+            )
           ],
         ),
       ),
