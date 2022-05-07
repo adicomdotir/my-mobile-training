@@ -2,6 +2,7 @@ import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'dart:math' as math;
 
 class ReportScreen extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _ReportScreenState extends State<ReportScreen> {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     Map<String, dynamic> map = {};
+    List<String> colors = [];
     List<Expense> allExpense = await databaseHelper.getAllExpense();
     allExpense.forEach((expense) {
       String dateKey =
@@ -31,6 +33,8 @@ class _ReportScreenState extends State<ReportScreen> {
           map[dateKey][expense.categoryTitle.toString()] = tmpPrice.toString();
         } else {
           map[dateKey][expense.categoryTitle.toString()] = expense.price;
+          // Todo: Fix bugs
+          colors.add(expense.categoryColor ?? '');
         }
         int tmpPrice = int.parse(map[dateKey]['sum']);
         tmpPrice += int.parse(expense.price);
@@ -44,9 +48,14 @@ class _ReportScreenState extends State<ReportScreen> {
       }
     });
 
+    print(colors);
+
     final numberFormat = NumberFormat("#,###", "fa_IR");
     TextStyle headerTextStyle = TextStyle(fontSize: 24);
     TextStyle bodyTextStyle = TextStyle(fontSize: 18);
+
+    List<double> sum = [];
+    List<List<double>> percent = [];
 
     map.forEach((key, value) {
       Column result = Column(
@@ -66,7 +75,13 @@ class _ReportScreenState extends State<ReportScreen> {
           ));
         } else if (key == 'sum') {
           result.children.add(SizedBox(height: 8));
-          var tmp = 'کل هزینه' + ' ' + numberFormat.format(int.parse(value)) + ' ' + 'تومان';
+          sum.add(double.parse(value));
+          percent.add([]);
+          var tmp = 'کل هزینه' +
+              ' ' +
+              numberFormat.format(int.parse(value)) +
+              ' ' +
+              'تومان';
           result.children.add(Text(
             tmp,
             style: bodyTextStyle,
@@ -74,11 +89,34 @@ class _ReportScreenState extends State<ReportScreen> {
           result.children.add(SizedBox(height: 16));
           result.children.add(Text('هزینه ها بر اساس دسته'));
         } else {
-          var tmp = '${key} ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
+          var p = double.parse(value) / (sum[sum.length - 1]);
+          percent[sum.length - 1].add(p);
+          var tmp =
+              '$key ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
           result.children.add(Text(tmp));
         }
       });
+      List<Widget> chart = [];
+      percent[percent.length - 1].forEach((element) {
+        var percent = (element * 1000).toInt();
+        chart.add(Expanded(
+            flex: percent,
+            child: Container(
+              color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
+                  .withOpacity(1.0),
+            )));
+      });
       setState(() {
+        result.children.add(SizedBox(height: 8));
+        Container p = Container(
+          height: 24,
+          width: double.infinity,
+          color: Colors.red,
+          child: Row(
+            children: chart,
+          ),
+        );
+        result.children.add(p);
         myList.add(result);
       });
     });
