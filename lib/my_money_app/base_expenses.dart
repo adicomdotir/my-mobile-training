@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:first_flutter/my_money_app/add_edit_category_screen.dart';
 import 'package:first_flutter/my_money_app/add_edit_expense_screen.dart';
 import 'package:first_flutter/my_money_app/expense.dart';
@@ -62,14 +64,15 @@ class _BaseExpenseState extends State<BaseExpense> {
     categoryTitle.addAll(categoryList);
   }
 
-  void dbFilterSection(DateTime startDate, DateTime endDate) async {
+  void dbFilterSection(DateTime startDate, DateTime endDate, String text) async {
     endDate = endDate.add(Duration(days: 1));
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     List<Expense> result = await databaseHelper.getAllExpenseWithFilter(
         int.parse(categoryValue),
         startDate.microsecondsSinceEpoch,
-        endDate.microsecondsSinceEpoch);
+        endDate.microsecondsSinceEpoch,
+        text);
     setState(() {
       if (page == 0) {
         expenseList = result;
@@ -239,6 +242,7 @@ class _BaseExpenseState extends State<BaseExpense> {
   }
 
   Future<void> _showFilterDialog() async {
+    TextEditingController controller = TextEditingController();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -254,6 +258,24 @@ class _BaseExpenseState extends State<BaseExpense> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  TextField(
+                    controller: controller,
+                    decoration: InputDecoration(
+                      labelText: 'متن جستجو',
+                      labelStyle: TextStyle(
+                        color: Colors.black87
+                      ),
+                      enabledBorder: new OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.black87),
+                      ),
+                      focusedBorder: new OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.black87),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -265,19 +287,23 @@ class _BaseExpenseState extends State<BaseExpense> {
                               jalaliStartDate = Jalali.fromDateTime(result);
                             });
                           },
-                          child: Text('${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}')),
+                          child: Text(
+                              '${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}')),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('تا تاریخ'),
-                      TextButton(onPressed: () async {
+                      TextButton(
+                          onPressed: () async {
                             var result = await _selectDate(context, endDate);
                             setState(() {
                               jalaliEndDate = Jalali.fromDateTime(result);
                             });
-                      }, child: Text('${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}')),
+                          },
+                          child: Text(
+                              '${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}')),
                     ],
                   ),
                   SizedBox(
@@ -327,7 +353,8 @@ class _BaseExpenseState extends State<BaseExpense> {
               TextButton(
                 child: Text('اعمال'),
                 onPressed: () {
-                  dbFilterSection(jalaliStartDate.toDateTime(), jalaliEndDate.toDateTime());
+                  dbFilterSection(
+                      jalaliStartDate.toDateTime(), jalaliEndDate.toDateTime(), controller.text);
                   Navigator.of(context).pop();
                 },
               ),
