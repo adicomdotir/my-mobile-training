@@ -75,7 +75,6 @@ class DatabaseHelper {
     // final List<Map<String, dynamic>> maps = await db.query('expense');
     final List<Map<String, dynamic>> maps = await db.rawQuery(
         'SELECT expense.*, category.title AS categoryTitle, category.color AS categoryColor FROM expense INNER JOIN category on category.id = categoryId WHERE date >= $startDate AND date <= $endDate AND ($categoryId == -1 OR $categoryId = categoryId) ORDER BY date DESC');
-    
     return List.generate(
         maps.length,
         (idx) => Expense(

@@ -58,16 +58,18 @@ class _BaseExpenseState extends State<BaseExpense> {
       }
     });
     List<Category> categoryList = await databaseHelper.getAllCategory();
+    categoryTitle = [Category(id: -1, title: 'همه', color: 'FFFFFF')];
     categoryTitle.addAll(categoryList);
   }
 
-  void dbFilterSection() async {
+  void dbFilterSection(DateTime startDate, DateTime endDate) async {
+    endDate = endDate.add(Duration(days: 1));
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     List<Expense> result = await databaseHelper.getAllExpenseWithFilter(
         int.parse(categoryValue),
-        DateTime(2019, 1, 1).microsecondsSinceEpoch,
-        DateTime.now().microsecondsSinceEpoch);
+        startDate.microsecondsSinceEpoch,
+        endDate.microsecondsSinceEpoch);
     setState(() {
       if (page == 0) {
         expenseList = result;
@@ -75,8 +77,6 @@ class _BaseExpenseState extends State<BaseExpense> {
         expenseList.addAll(result);
       }
     });
-    List<Category> categoryList = await databaseHelper.getAllCategory();
-    categoryTitle.addAll(categoryList);
   }
 
   void dbDeleteSection() async {
@@ -243,6 +243,10 @@ class _BaseExpenseState extends State<BaseExpense> {
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
+        DateTime startDate = DateTime.now();
+        Jalali jalaliStartDate = Jalali.fromDateTime(startDate);
+        DateTime endDate = DateTime.now();
+        Jalali jalaliEndDate = Jalali.fromDateTime(endDate);
         return StatefulBuilder(builder: (ctx, StateSetter setState) {
           return AlertDialog(
             title: Text('فیلتر'),
@@ -255,17 +259,25 @@ class _BaseExpenseState extends State<BaseExpense> {
                     children: [
                       Text('از تاریخ'),
                       TextButton(
-                          onPressed: () {
-                            _selectDate(context);
+                          onPressed: () async {
+                            var result = await _selectDate(context, startDate);
+                            setState(() {
+                              jalaliStartDate = Jalali.fromDateTime(result);
+                            });
                           },
-                          child: Text('1400/01/01')),
+                          child: Text('${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}')),
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('تا تاریخ'),
-                      TextButton(onPressed: () {}, child: Text('1400/01/01')),
+                      TextButton(onPressed: () async {
+                            var result = await _selectDate(context, endDate);
+                            setState(() {
+                              jalaliEndDate = Jalali.fromDateTime(result);
+                            });
+                      }, child: Text('${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}')),
                     ],
                   ),
                   SizedBox(
@@ -315,7 +327,7 @@ class _BaseExpenseState extends State<BaseExpense> {
               TextButton(
                 child: Text('اعمال'),
                 onPressed: () {
-                  dbFilterSection();
+                  dbFilterSection(jalaliStartDate.toDateTime(), jalaliEndDate.toDateTime());
                   Navigator.of(context).pop();
                 },
               ),
@@ -332,17 +344,16 @@ class _BaseExpenseState extends State<BaseExpense> {
     );
   }
 
-  _selectDate(BuildContext context) async {
+  Future<DateTime> _selectDate(BuildContext context, DateTime date) async {
     Jalali? selected = await showPersianDatePicker(
       context: context,
-      initialDate: Jalali.fromDateTime(selectedDate),
+      initialDate: Jalali.fromDateTime(date),
       firstDate: Jalali(1370, 1),
       lastDate: Jalali(1450, 1),
     );
-    if (selected != null && selected != selectedDate) {
-      setState(() {
-        selectedDate = selected.toDateTime();
-      });
+    if (selected != null && selected != date) {
+      return selected.toDateTime();
     }
+    return DateTime.now();
   }
 }

@@ -222,7 +222,7 @@ class _MyAppState extends State<MyApp> {
       case 32:
         return Color(0xFFff7456);
       case 64:
-        return Color(0xFF);
+        return Color(0xFFff5500);
       case 128:
         return Color(0xFFf1cf61);
       case 256:
