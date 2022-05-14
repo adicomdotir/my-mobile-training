@@ -3,6 +3,7 @@ import 'package:first_flutter/clean_architecture_app/presentation/login/login.da
 import 'package:first_flutter/clean_architecture_app/presentation/main/main_view.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/onboarding/onboarding.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/register/register.dart';
+import 'package:first_flutter/clean_architecture_app/presentation/resources/strings_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/splash/splash.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/store_details/store_details.dart';
 import 'package:flutter/material.dart';
@@ -41,8 +42,8 @@ class RouteGenerator {
   static Route<dynamic> unDefinedRoute() {
     return MaterialPageRoute(builder: (_) =>
       Scaffold(
-        appBar: AppBar(title: Text('No Route Found')),
-        body: Center(child: Text('No Route Found')),
+        appBar: AppBar(title: Text(AppStrings.noRouteFound)),
+        body: Center(child: Text(AppStrings.noRouteFound)),
       )
     );
   }
