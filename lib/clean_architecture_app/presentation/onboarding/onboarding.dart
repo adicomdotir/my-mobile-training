@@ -2,6 +2,7 @@ import 'package:first_flutter/clean_architecture_app/presentation/resources/asse
 import 'package:first_flutter/clean_architecture_app/presentation/resources/color_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/strings_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/values_manager.dart';
+import 'package:first_flutter/food_delivery_app/data/data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -86,7 +87,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               child: SvgPicture.asset(ImageAssets.leftArrowIc),
             ),
             onTap: () {
-              // TODO: next
+              _pageController.animateToPage(_getPreviousIndex(),
+                  duration: Duration(milliseconds: DurationConstant.d300),
+                  curve: Curves.bounceInOut);
             },
           ),
         ),
@@ -94,8 +97,10 @@ class _OnBoardingViewState extends State<OnBoardingView> {
         Row(
           children: [
             for (var i = 0; i < _list.length; i++)
-              Padding(padding: EdgeInsets.all(AppPadding.p8),
-              child: _getProperCircle(i),)
+              Padding(
+                padding: EdgeInsets.all(AppPadding.p8),
+                child: _getProperCircle(i),
+              )
           ],
         ),
         // Right Arrow
@@ -108,12 +113,30 @@ class _OnBoardingViewState extends State<OnBoardingView> {
               child: SvgPicture.asset(ImageAssets.rightArrowIc),
             ),
             onTap: () {
-              // TODO: next
+              _pageController.animateToPage(_getNextIndex(),
+                  duration: Duration(milliseconds: DurationConstant.d300),
+                  curve: Curves.bounceInOut);
             },
           ),
         ),
       ],
     );
+  }
+
+  int _getPreviousIndex() {
+    int previousIndex = _currentIndex--;
+    if (previousIndex == -1) {
+      _currentIndex = _list.length - 1;
+    }
+    return _currentIndex;
+  }
+
+  int _getNextIndex() {
+    int nextIndex = _currentIndex++;
+    if (nextIndex >= _list.length) {
+      _currentIndex = 0;
+    }
+    return _currentIndex;
   }
 
   Widget _getProperCircle(int index) {
