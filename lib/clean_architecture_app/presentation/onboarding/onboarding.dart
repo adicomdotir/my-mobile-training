@@ -64,11 +64,64 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     child: Text(
                       AppStrings.skip,
                       textAlign: TextAlign.end,
-                    )))
+                    ))),
+            // TODO: add bottom sheet
           ],
         ),
       ),
     );
+  }
+
+  Widget _getBottomSheetWidget() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        // Left Arrow
+        Padding(
+          padding: EdgeInsets.all(AppPadding.p14),
+          child: GestureDetector(
+            child: SizedBox(
+              width: AppSize.s20,
+              height: AppSize.s20,
+              child: SvgPicture.asset(ImageAssets.leftArrowIc),
+            ),
+            onTap: () {
+              // TODO: next
+            },
+          ),
+        ),
+        // Cirlce indicator
+        Row(
+          children: [
+            for (var i = 0; i < _list.length; i++)
+              Padding(padding: EdgeInsets.all(AppPadding.p8),
+              child: _getProperCircle(i),)
+          ],
+        ),
+        // Right Arrow
+        Padding(
+          padding: EdgeInsets.all(AppPadding.p14),
+          child: GestureDetector(
+            child: SizedBox(
+              width: AppSize.s20,
+              height: AppSize.s20,
+              child: SvgPicture.asset(ImageAssets.rightArrowIc),
+            ),
+            onTap: () {
+              // TODO: next
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getProperCircle(int index) {
+    if (index == _currentIndex) {
+      return SvgPicture.asset(ImageAssets.hollowCirlceIc);
+    } else {
+      return SvgPicture.asset(ImageAssets.solidCircleIc);
+    }
   }
 }
 
