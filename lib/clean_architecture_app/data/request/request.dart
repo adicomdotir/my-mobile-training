@@ -1,6 +1,8 @@
 class LoginRequest {
-  String name;
+  String email;
   String password;
+  String imei;
+  String deviceType;
 
-  LoginRequest(this.name, this.password);
+  LoginRequest(this.email, this.password, this.imei, this.deviceType);
 }
