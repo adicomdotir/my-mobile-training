@@ -1,3 +1,4 @@
+import 'package:first_flutter/clean_architecture_app/app/functions.dart';
 import 'package:first_flutter/clean_architecture_app/data/network/failure.dart';
 import 'package:dartz/dartz.dart';
 import 'package:first_flutter/clean_architecture_app/data/request/request.dart';
@@ -11,10 +12,12 @@ class LoginUseCase implements BaseUseCase<LoginUseCaseInput, Authentication> {
   LoginUseCase(this._repository);
 
   @override
-  Future<Either<Failure, Authentication>> execute(LoginUseCaseInput input) async {
-    await _repository.login(LoginRequest(input.email, input.password, 'imei', 'deviceType'));
+  Future<Either<Failure, Authentication>> execute(
+      LoginUseCaseInput input) async {
+    DeviceInfo deviceInfo = await getDeviceDetails();
+    return await _repository.login(LoginRequest(
+        input.email, input.password, deviceInfo.identifier, deviceInfo.name));
   }
-
 }
 
 class LoginUseCaseInput {
