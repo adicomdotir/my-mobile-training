@@ -1,5 +1,5 @@
 import 'package:first_flutter/clean_architecture_app/data/responses/respnses.dart';
-import 'package:first_flutter/clean_architecture_app/domain/model.dart';
+import 'package:first_flutter/clean_architecture_app/domain/model/model.dart';
 import '../../app/extentions.dart';
 
 const EMPTY = "";

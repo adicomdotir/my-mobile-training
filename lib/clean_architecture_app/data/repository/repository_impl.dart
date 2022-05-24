@@ -1,11 +1,11 @@
 import 'package:first_flutter/clean_architecture_app/data/data_source/remote_data_source.dart';
 import 'package:first_flutter/clean_architecture_app/data/network/error_handler.dart';
 import 'package:first_flutter/clean_architecture_app/data/network/network_info.dart';
-import 'package:first_flutter/clean_architecture_app/domain/model.dart';
+import 'package:first_flutter/clean_architecture_app/domain/model/model.dart';
 import 'package:first_flutter/clean_architecture_app/data/request/request.dart';
 import 'package:first_flutter/clean_architecture_app/data/network/failure.dart';
 import 'package:dartz/dartz.dart';
-import 'package:first_flutter/clean_architecture_app/domain/repository.dart';
+import 'package:first_flutter/clean_architecture_app/domain/repository/repository.dart';
 import 'package:first_flutter/clean_architecture_app/data/mapper/mapper.dart';
 
 class RepositoryImpl implements Repository {

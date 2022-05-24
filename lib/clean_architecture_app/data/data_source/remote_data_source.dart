@@ -1,7 +1,7 @@
 import 'package:first_flutter/clean_architecture_app/data/network/app_api.dart';
 import 'package:first_flutter/clean_architecture_app/data/request/request.dart';
 import 'package:first_flutter/clean_architecture_app/data/responses/respnses.dart';
-import 'package:first_flutter/clean_architecture_app/domain/model.dart';
+import 'package:first_flutter/clean_architecture_app/domain/model/model.dart';
 
 abstract class RemoteDataSource {
   Future<AuthenticationResponse> login(LoginRequest loginRequest);

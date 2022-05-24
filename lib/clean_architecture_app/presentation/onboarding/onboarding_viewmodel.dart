@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:first_flutter/clean_architecture_app/domain/model.dart';
+import 'package:first_flutter/clean_architecture_app/domain/model/model.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/base/baseviewmodel.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/assets_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/strings_manager.dart';
