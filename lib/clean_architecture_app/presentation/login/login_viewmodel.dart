@@ -55,8 +55,8 @@ class LoginViewModel extends BaseViewModel
       .map((userName) => _isUserNameValid(userName));
 
   @override
-  Stream<bool> get outputIsAllInputsValid => _isAllInputsValidStreamController.stream
-      .map((_) => _isAllInputsValid());
+  Stream<bool> get outputIsAllInputsValid =>
+      _isAllInputsValidStreamController.stream.map((_) => _isAllInputsValid());
 
   @override
   setPassword(String password) {
@@ -81,7 +81,8 @@ class LoginViewModel extends BaseViewModel
   }
 
   bool _isAllInputsValid() {
-    return _isPasswordValid(loginObject.password) && _isUserNameValid(loginObject.userName);
+    return _isPasswordValid(loginObject.password) &&
+        _isUserNameValid(loginObject.userName);
   }
 
   _validate() {
