@@ -1,3 +1,4 @@
+import 'package:first_flutter/clean_architecture_app/app/di.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/forgot_password/forgot_password.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/login/login.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/main/main_view.dart';
@@ -26,6 +27,7 @@ class RouteGenerator {
       case Routes.onBoardingRoute:
         return MaterialPageRoute(builder: (_) => OnBoardingView());
       case Routes.loginRoute:
+        initLoginModule();
         return MaterialPageRoute(builder: (_) => LoginView());
       case Routes.registerRoute:
         return MaterialPageRoute(builder: (_) => RegisterView());
@@ -35,16 +37,16 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => MainView());
       case Routes.storeDetailsRoute:
         return MaterialPageRoute(builder: (_) => StoreDetailsView());
-      default: return unDefinedRoute();
+      default:
+        return unDefinedRoute();
     }
   }
 
   static Route<dynamic> unDefinedRoute() {
-    return MaterialPageRoute(builder: (_) =>
-      Scaffold(
-        appBar: AppBar(title: Text(AppStrings.noRouteFound)),
-        body: Center(child: Text(AppStrings.noRouteFound)),
-      )
-    );
+    return MaterialPageRoute(
+        builder: (_) => Scaffold(
+              appBar: AppBar(title: Text(AppStrings.noRouteFound)),
+              body: Center(child: Text(AppStrings.noRouteFound)),
+            ));
   }
 }

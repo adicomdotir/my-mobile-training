@@ -1,3 +1,4 @@
+import 'package:first_flutter/clean_architecture_app/app/di.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/login/login_viewmodel.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/assets_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/color_manager.dart';
@@ -14,7 +15,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  LoginViewModel _viewModel = LoginViewModel();
+  LoginViewModel _viewModel = instance<LoginViewModel>();
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
