@@ -75,19 +75,30 @@ extension FlowStateExtension on FlowState {
         }
       case ErrorState:
         {
-          break;
+          if (getStateRendererType() == StateRendererType.POPUP_ERROR_STATE) {
+            showPopUp(context, getStateRendererType(), getMessage());
+            return contentScreenWidget;
+          } else {
+            return StateRenderer(
+                stateRendererType: getStateRendererType(),
+                retryActionFunction: retryActionFunction,
+                message: getMessage());
+          }
         }
       case ContentState:
         {
-          break;
+          return contentScreenWidget;
         }
       case EmptyState:
         {
-          break;
+          return StateRenderer(
+              stateRendererType: getStateRendererType(),
+              retryActionFunction: retryActionFunction,
+              message: getMessage());
         }
       default:
         {
-          break;
+          return contentScreenWidget;
         }
     }
   }
