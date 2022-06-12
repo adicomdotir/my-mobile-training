@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:first_flutter/clean_architecture_app/data/network/failure.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/assets_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/color_manager.dart';
