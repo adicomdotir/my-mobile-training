@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:first_flutter/clean_architecture_app/domain/usecase/login_usecase.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/base/baseviewmodel.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/common/frezzed_data_classes.dart';
+import 'package:first_flutter/clean_architecture_app/presentation/common/state_renderer/state_renderer_impl.dart';
 
 class LoginViewModel extends BaseViewModel
     with LoginViewModelInputs, LoginViewModelOutputs {
@@ -27,7 +28,7 @@ class LoginViewModel extends BaseViewModel
 
   @override
   void start() {
-    // TODO: implement start
+    inputState.add(ContentState());
   }
 
   @override
