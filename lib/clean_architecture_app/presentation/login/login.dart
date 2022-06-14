@@ -1,3 +1,4 @@
+import 'package:first_flutter/clean_architecture_app/app/app_prefs.dart';
 import 'package:first_flutter/clean_architecture_app/app/di.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/common/state_renderer/state_renderer_impl.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/login/login_viewmodel.dart';
@@ -7,6 +8,8 @@ import 'package:first_flutter/clean_architecture_app/presentation/resources/rout
 import 'package:first_flutter/clean_architecture_app/presentation/resources/strings_manager.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/resources/values_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -17,16 +20,25 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   LoginViewModel _viewModel = instance<LoginViewModel>();
+  AppPreferances _appPreferances = instance<AppPreferances>();
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   _bind() {
+    _viewModel.start();
     _userNameController.addListener(() {
       _viewModel.setUserName(_userNameController.text);
     });
     _passwordController.addListener(() {
       _viewModel.setPassword(_passwordController.text);
+    });
+    _viewModel.isUserLoggedInSuccessfullyStreamController.stream
+        .listen((isSuccessLoggedIn) {
+      SchedulerBinding.instance?.addPostFrameCallback((_) {
+        _appPreferances.setUserLoggedIn();
+        Navigator.of(context).pushReplacementNamed(Routes.mainRoute);
+      });
     });
   }
 
