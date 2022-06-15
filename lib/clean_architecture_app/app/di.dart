@@ -11,6 +11,9 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
+import '../domain/usecase/forgot_password_usecase.dart';
+import '../presentation/forgot_password/forgot_password_viewmodel.dart';
+
 final instance = GetIt.instance;
 
 Future<void> initAppModule() async {
@@ -39,5 +42,14 @@ initLoginModule() {
         .registerLazySingleton<LoginUseCase>(() => LoginUseCase(instance()));
     instance.registerLazySingleton<LoginViewModel>(
         () => LoginViewModel(instance()));
+  }
+}
+
+initForgotPasswordModule() {
+  if (!GetIt.I.isRegistered<ForgotPasswordUseCase>()) {
+    instance.registerFactory<ForgotPasswordUseCase>(
+            () => ForgotPasswordUseCase(instance()));
+    instance.registerFactory<ForgotPasswordViewModel>(
+            () => ForgotPasswordViewModel(instance()));
   }
 }

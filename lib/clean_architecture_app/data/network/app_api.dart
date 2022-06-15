@@ -1,5 +1,6 @@
 import 'package:first_flutter/clean_architecture_app/app/constant.dart';
 import 'package:first_flutter/clean_architecture_app/data/responses/respnses.dart';
+import 'package:first_flutter/instagram_app/main.dart';
 import 'package:retrofit/http.dart';
 import 'package:dio/dio.dart';
 part 'app_api.g.dart';
@@ -15,4 +16,7 @@ abstract class AppServiceClient {
     @Field('imei') String imei,
     @Field('deviceType') String deviceType,
   );
+
+  @POST("/customer/forgotPassword")
+  Future<ForgotPasswordResponse> forgotPassword(@Field("email") String email);
 }
