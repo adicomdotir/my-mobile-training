@@ -50,6 +50,13 @@ class StateRenderer extends StatelessWidget {
           _getMessage(message),
           _getRetryButton(AppStrings.ok, context)
         ]);
+      case StateRendererType.POPUP_SUCCESS:
+        return _getPopUpDialog(context, [
+          _getAnimatedImage(JsonAssets.success),
+          _getMessage(title),
+          _getMessage(message),
+          _getRetryButton(AppStrings.ok, context)
+        ]);
       case StateRendererType.FULL_SCREEN_LOADING_STATE:
         return _getItemsInColumn([_getAnimatedImage(JsonAssets.loading), _getMessage(message)]);
       case StateRendererType.FULL_SCREEN_ERROR_STATE:
