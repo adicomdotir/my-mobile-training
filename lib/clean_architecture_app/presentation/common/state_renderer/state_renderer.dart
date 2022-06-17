@@ -11,6 +11,7 @@ import 'package:lottie/lottie.dart';
 enum StateRendererType {
   POPUP_LOADING_STATE,
   POPUP_ERROR_STATE,
+  POPUP_SUCCESS,
   FULL_SCREEN_LOADING_STATE,
   FULL_SCREEN_ERROR_STATE,
   CONTENT_SCREEN_STATE,
