@@ -39,34 +39,34 @@ ThemeData getApplicationTheme() {
       textTheme: TextTheme(
           headline1: getSemiBoldStyle(
               color: ColorManager.darkGrey, fontSize: FontSize.s16),
+          headline2: getReqularStyle(
+              color: ColorManager.white, fontSize: FontSize.s16),
           subtitle1: getMediumStyle(
               color: ColorManager.lighGrey, fontSize: FontSize.s14),
           subtitle2: getMediumStyle(
               color: ColorManager.primary, fontSize: FontSize.s14),
           caption: getReqularStyle(color: ColorManager.grey1),
           bodyText1: getReqularStyle(color: ColorManager.grey)),
-          
-          inputDecorationTheme: InputDecorationTheme(
-            contentPadding: EdgeInsets.all(AppPadding.p8),
-            hintStyle: getReqularStyle(color: ColorManager.grey1),
-            labelStyle: getMediumStyle(color: ColorManager.darkGrey),
-            errorStyle: getReqularStyle(color: ColorManager.error),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: ColorManager.grey, width: AppSize.s1_5),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))
-            ),
-            errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: ColorManager.error, width: AppSize.s1_5),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))
-            ),
-            focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
-              borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))
-            ),
-          )
-          );
+      inputDecorationTheme: InputDecorationTheme(
+        contentPadding: EdgeInsets.all(AppPadding.p8),
+        hintStyle: getReqularStyle(color: ColorManager.grey1),
+        labelStyle: getMediumStyle(color: ColorManager.darkGrey),
+        errorStyle: getReqularStyle(color: ColorManager.error),
+        enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: ColorManager.grey, width: AppSize.s1_5),
+            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
+        focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
+            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
+        errorBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: ColorManager.error, width: AppSize.s1_5),
+            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
+        focusedErrorBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: ColorManager.primary, width: AppSize.s1_5),
+            borderRadius: BorderRadius.all(Radius.circular(AppSize.s8))),
+      ));
 }
