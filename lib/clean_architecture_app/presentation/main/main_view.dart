@@ -1,4 +1,4 @@
-import 'package:first_flutter/clean_architecture_app/presentation/main/home_page.dart';
+import 'package:first_flutter/clean_architecture_app/presentation/main/home/home_page.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/main/notificatoins_page.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/main/search_page.dart';
 import 'package:first_flutter/clean_architecture_app/presentation/main/settings_page.dart';

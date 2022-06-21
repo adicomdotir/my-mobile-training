@@ -14,7 +14,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:data_connection_checker/data_connection_checker.dart';
 
 import '../domain/usecase/forgot_password_usecase.dart';
+import '../domain/usecase/home_usecase.dart';
 import '../presentation/forgot_password/forgot_password_viewmodel.dart';
+import '../presentation/main/home/home_viewmodel.dart';
 
 final instance = GetIt.instance;
 
@@ -62,5 +64,12 @@ initRegisterModule() {
             () => RegisterUseCase(instance()));
     instance.registerFactory<RegisterViewModel>(
             () => RegisterViewModel(instance()));
+  }
+}
+
+initHomeModule() {
+  if (!GetIt.I.isRegistered<HomeUsecase>()) {
+    instance.registerFactory<HomeUsecase>(() => HomeUsecase(instance()));
+    instance.registerFactory<HomeViewModel>(() => HomeViewModel(instance()));
   }
 }
