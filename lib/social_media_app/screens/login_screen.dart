@@ -1,3 +1,4 @@
+import 'package:first_flutter/social_media_app/widgets/curve_clipper.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,11 +17,14 @@ class _LoginScreenState extends State<LoginScreen> {
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
-              Image(
-                image: AssetImage('assets/images/login_background.jpg'),
-                height: MediaQuery.of(context).size.height / 2.5,
-                width: double.infinity,
-                fit: BoxFit.cover,
+              ClipPath(
+                clipper: CurveClipper(),
+                child: Image(
+                  image: AssetImage('assets/images/login_background.jpg'),
+                  height: MediaQuery.of(context).size.height / 2.5,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
               ),
               Text(
                 'FRENZY',
@@ -28,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: Theme.of(context).primaryColor,
                     fontSize: 34,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 1),
+                    letterSpacing: 10),
               ),
               SizedBox(
                 height: 10,
