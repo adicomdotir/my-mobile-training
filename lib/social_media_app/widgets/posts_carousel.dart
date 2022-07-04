@@ -42,10 +42,15 @@ class PostsCarousel extends StatelessWidget {
       builder: (context, widget) {
         double value = 1;
         if (pageController.position.haveDimensions) {
-          value = pageController.page - index;
+          value = pageController.page! - index;
           value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
-          return Center(child: SizedBox(height: Curves.easeInOut.transform(value),),);
         }
+        return Center(
+          child: SizedBox(
+            height: Curves.easeInOut.transform(value) * 400.0,
+            child: widget,
+          ),
+        );
       },
       child: Stack(
         children: [
