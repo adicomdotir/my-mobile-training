@@ -15,11 +15,33 @@ class OrderFood extends StatefulWidget {
   _OrderFoodState createState() => _OrderFoodState();
 }
 
-class _OrderFoodState extends State<OrderFood> {
+class _OrderFoodState extends State<OrderFood> with WidgetsBindingObserver {
+@override
+  void initState() {
+
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('object');
+    print(state);
+  }
+
   List<Food> listFood = [
-    Food(name: 'BBQ', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
-    Food(name: 'Pizza', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
-    Food(name: 'Burgers', image: 'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
+    Food(
+        name: 'BBQ',
+        image:
+            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
+    Food(
+        name: 'Pizza',
+        image:
+            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
+    Food(
+        name: 'Burgers',
+        image:
+            'https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&webp=true&resize=300,272'),
   ];
 
   @override
@@ -113,23 +135,32 @@ class _OrderFoodState extends State<OrderFood> {
                     child: StaggeredGridView.countBuilder(
                       crossAxisCount: 4,
                       itemCount: listFood.length,
-                      itemBuilder: (context, index) => Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(listFood[index].image),
-                          ),
-                          Positioned(
-                            left: 10,
-                            top: 10,
-                            child: Text(
-                              listFood[index].name,
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
+                      itemBuilder: (context, index) => GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => DetailPage(),
+                            ),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(listFood[index].image),
+                            ),
+                            Positioned(
+                              left: 10,
+                              top: 10,
+                              child: Text(
+                                listFood[index].name,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       staggeredTileBuilder: (index) => StaggeredTile.fit(2),
                       mainAxisSpacing: 10,
@@ -141,5 +172,17 @@ class _OrderFoodState extends State<OrderFood> {
             ),
           ),
         ));
+  }
+}
+
+class DetailPage extends StatelessWidget {
+  const DetailPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(child: Text('Detail Page')),
+    );
   }
 }
