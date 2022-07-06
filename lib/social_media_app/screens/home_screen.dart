@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../models/user_model.dart';
+import '../widgets/custom_drawer.dart';
 import '../widgets/following_users.dart';
 import '../widgets/posts_carousel.dart';
 
@@ -53,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen>
               Tab(text: 'Latest'),
             ]),
       ),
+      drawer: CustomDrawer(),
       body: ListView(
         children: [
           FollowingUsers(),
