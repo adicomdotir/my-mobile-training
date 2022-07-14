@@ -1,4 +1,7 @@
+import 'package:first_flutter/foodly_resturant/components/menu_card.dart';
+import 'package:first_flutter/foodly_resturant/components/restaruant_categories.dart';
 import 'package:first_flutter/foodly_resturant/components/restaurant_info.dart';
+import 'package:first_flutter/foodly_resturant/models/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -44,9 +47,20 @@ class _RestaurantPageState extends State<RestaurantPage> {
               ),
             ],
           ),
-          SilverToBoxAdapter(
+          SliverToBoxAdapter(
             child: RestaurantInfo(),
-          )
+          ),
+          SliverToBoxAdapter(
+            child: Categories(
+              onChanged: (value) {
+                
+              },
+              selectedIndex: 0,
+            ),
+          ),
+          SliverList(delegate: SliverChildBuilderDelegate((context, index) {
+            return MenuCategoryItem(title: demoCategoryMenus[index].category, items: []);
+          }, childCount: demoCategoryMenus.length)),
         ],
       ),
     );
