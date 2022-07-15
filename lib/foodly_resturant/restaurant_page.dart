@@ -4,6 +4,7 @@ import 'package:first_flutter/foodly_resturant/components/restaurant_info.dart';
 import 'package:first_flutter/foodly_resturant/models/menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import './components/restaruant_categories.dart';
 
 class RestaurantPage extends StatefulWidget {
   const RestaurantPage({Key? key}) : super(key: key);
@@ -20,6 +21,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
         slivers: [
           SliverAppBar(
             expandedHeight: 200.0,
+            pinned: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.asset(
                 'assets/images/Header-image.png',
@@ -36,13 +40,19 @@ class _RestaurantPageState extends State<RestaurantPage> {
             actions: [
               CircleAvatar(
                 backgroundColor: Colors.white,
-                child: SvgPicture.asset('assets/icons/share.svg', color: Colors.black,),
+                child: SvgPicture.asset(
+                  'assets/icons/share.svg',
+                  color: Colors.black,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
-                  child: SvgPicture.asset('assets/icons/search_.svg', color: Colors.black,),
+                  child: SvgPicture.asset(
+                    'assets/icons/search_.svg',
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
@@ -50,17 +60,28 @@ class _RestaurantPageState extends State<RestaurantPage> {
           SliverToBoxAdapter(
             child: RestaurantInfo(),
           ),
-          SliverToBoxAdapter(
-            child: Categories(
-              onChanged: (value) {
-                
-              },
-              selectedIndex: 0,
-            ),
+          SliverPersistentHeader(
+              pinned: true,
+              delegate: RestaurantCategories(
+                  onChanged: (value) {}, selectedIndex: 0)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+              List<Menu> items = demoCategoryMenus[index].items;
+              return MenuCategoryItem(
+                  title: demoCategoryMenus[index].category,
+                  items: List.generate(
+                      items.length,
+                      (index) => Padding(
+                            padding: const EdgeInsets.only(bottom: 16.0),
+                            child: MenuCard(
+                                image: items[index].image,
+                                title: items[index].title,
+                                price: items[index].price),
+                          )));
+            }, childCount: demoCategoryMenus.length)),
           ),
-          SliverList(delegate: SliverChildBuilderDelegate((context, index) {
-            return MenuCategoryItem(title: demoCategoryMenus[index].category, items: []);
-          }, childCount: demoCategoryMenus.length)),
         ],
       ),
     );
