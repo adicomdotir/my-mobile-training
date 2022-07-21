@@ -1,4 +1,5 @@
 import 'package:first_flutter/my_money_app/expense.dart';
+import 'package:first_flutter/my_money_app/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
 import 'package:intl/intl.dart';
@@ -20,9 +21,10 @@ class _ReportScreenState extends State<ReportScreen> {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     Map<String, dynamic> map = {};
-    List<String> colors = [];
+    Set<String> colors = {};
     List<Expense> allExpense = await databaseHelper.getAllExpense();
     allExpense.forEach((expense) {
+      colors.add(expense.categoryColor ?? 'null');
       String dateKey =
           getDate(DateTime.fromMicrosecondsSinceEpoch(expense.date));
       if (map.containsKey(dateKey)) {
@@ -33,8 +35,6 @@ class _ReportScreenState extends State<ReportScreen> {
           map[dateKey][expense.categoryTitle.toString()] = tmpPrice.toString();
         } else {
           map[dateKey][expense.categoryTitle.toString()] = expense.price;
-          // Todo: Fix bugs
-          colors.add(expense.categoryColor ?? '');
         }
         int tmpPrice = int.parse(map[dateKey]['sum']);
         tmpPrice += int.parse(expense.price);
@@ -48,8 +48,6 @@ class _ReportScreenState extends State<ReportScreen> {
       }
     });
 
-    print(colors);
-
     final numberFormat = NumberFormat("#,###", "fa_IR");
     TextStyle headerTextStyle = TextStyle(fontSize: 24);
     TextStyle bodyTextStyle = TextStyle(fontSize: 18);
@@ -61,6 +59,8 @@ class _ReportScreenState extends State<ReportScreen> {
       Column result = Column(
         children: [],
       );
+
+      int tmpColorIndex = 0;
       Map<String, String> newValue = value;
       newValue.forEach((key, value) {
         if (result.children.length != 0) {
@@ -93,25 +93,42 @@ class _ReportScreenState extends State<ReportScreen> {
           percent[sum.length - 1].add(p);
           var tmp =
               '$key ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
-          result.children.add(Text(tmp));
+          result.children.add(Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 10,
+                width: 10,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                color: convertHexColorToRgb(colors.elementAt(tmpColorIndex++)),
+                ),
+              ),
+              SizedBox(width: 10,),
+              Text(
+                tmp,
+              ),
+            ],
+          ));
         }
       });
+
       List<Widget> chart = [];
+      tmpColorIndex = 0;
       percent[percent.length - 1].forEach((element) {
         var percent = (element * 1000).toInt();
         chart.add(Expanded(
             flex: percent,
             child: Container(
-              color: Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                  .withOpacity(1.0),
+              padding: EdgeInsets.symmetric(vertical: 2),
+              color: convertHexColorToRgb(colors.elementAt(tmpColorIndex)),
+              child: Text('${(percent / 10).round()} %', maxLines: 1,  style: TextStyle(color: generateOppositeColor(colors.elementAt(tmpColorIndex++)), overflow: TextOverflow.fade), textAlign: TextAlign.center,),
             )));
       });
       setState(() {
-        result.children.add(SizedBox(height: 8));
+        result.children.add(SizedBox(height: 16));
         Container p = Container(
-          height: 24,
           width: double.infinity,
-          color: Colors.red,
           child: Row(
             children: chart,
           ),
