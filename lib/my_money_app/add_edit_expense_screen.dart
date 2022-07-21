@@ -4,6 +4,7 @@ import 'package:first_flutter/my_money_app/expense.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class AddEditExpenseScreen extends StatefulWidget {
   Expense? expense;
@@ -26,6 +27,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     dbSection();
     _titleCtrl.text = widget.expense?.title ?? '';
     _priceCtrl.text = widget.expense?.price ?? '';
+    _priceCtrl.text = NumericTextFormatter().formatEditUpdate(TextEditingValue(text: ''), TextEditingValue(text: _priceCtrl.text)).text;
     categoryValue = widget.expense?.categoryId.toString() ?? '';
     selectedDate = DateTime.fromMicrosecondsSinceEpoch(
         widget.expense?.date ?? DateTime.now().microsecondsSinceEpoch);
@@ -50,7 +52,7 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     int date = selectedDate.microsecondsSinceEpoch;
     Expense expense = Expense(
         title: _titleCtrl.text,
-        price: _priceCtrl.text,
+        price: _priceCtrl.text.replaceAll(',', ''),
         categoryId: int.parse(categoryValue),
         date: date);
     if (widget.expense == null) {
@@ -87,6 +89,10 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
             TextField(
                 controller: _priceCtrl,
                 keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  NumericTextFormatter()
+                ],
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16)),
@@ -205,5 +211,31 @@ class _AddEditExpenseScreenState extends State<AddEditExpenseScreen> {
     //   firstDate: DateTime(2010),
     //   lastDate: DateTime(2025),
     // );
+  }
+}
+
+class NumericTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.isEmpty) {
+      return newValue.copyWith(text: '');
+    } else if (newValue.text.compareTo(oldValue.text) != 0) {
+      final int selectionIndexFromTheRight =
+          newValue.text.length - newValue.selection.end;
+      var value = newValue.text;
+      if (newValue.text.length > 2) {
+        value = value.replaceAll(RegExp(r'\D'), '');
+        value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), ',');
+        print("Value ---- $value");
+      }
+      return TextEditingValue(
+        text: value,
+        selection: TextSelection.collapsed(
+            offset: value.length - selectionIndexFromTheRight),
+      );
+    } else {
+      return newValue;
+    }
   }
 }
