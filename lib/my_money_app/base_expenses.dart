@@ -64,7 +64,8 @@ class _BaseExpenseState extends State<BaseExpense> {
     categoryTitle.addAll(categoryList);
   }
 
-  void dbFilterSection(DateTime startDate, DateTime endDate, String text) async {
+  void dbFilterSection(
+      DateTime startDate, DateTime endDate, String text) async {
     endDate = endDate.add(Duration(days: 1));
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
@@ -249,8 +250,10 @@ class _BaseExpenseState extends State<BaseExpense> {
       builder: (BuildContext context) {
         DateTime startDate = DateTime.now();
         Jalali jalaliStartDate = Jalali.fromDateTime(startDate);
+        bool startDateSelected = false;
         DateTime endDate = DateTime.now();
         Jalali jalaliEndDate = Jalali.fromDateTime(endDate);
+        bool endDateSelected = false;
         return StatefulBuilder(builder: (ctx, StateSetter setState) {
           return AlertDialog(
             title: Text('فیلتر'),
@@ -262,9 +265,7 @@ class _BaseExpenseState extends State<BaseExpense> {
                     controller: controller,
                     decoration: InputDecoration(
                       labelText: 'متن جستجو',
-                      labelStyle: TextStyle(
-                        color: Colors.black87
-                      ),
+                      labelStyle: TextStyle(color: Colors.black87),
                       enabledBorder: new OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide(color: Colors.black87),
@@ -275,7 +276,9 @@ class _BaseExpenseState extends State<BaseExpense> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8,),
+                  SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -285,10 +288,12 @@ class _BaseExpenseState extends State<BaseExpense> {
                             var result = await _selectDate(context, startDate);
                             setState(() {
                               jalaliStartDate = Jalali.fromDateTime(result);
+                              startDateSelected = true;
                             });
                           },
-                          child: Text(
-                              '${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}')),
+                          child: Text(startDateSelected
+                              ? '${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}'
+                              : 'انتخاب نشده')),
                     ],
                   ),
                   Row(
@@ -300,10 +305,12 @@ class _BaseExpenseState extends State<BaseExpense> {
                             var result = await _selectDate(context, endDate);
                             setState(() {
                               jalaliEndDate = Jalali.fromDateTime(result);
+                              endDateSelected = true;
                             });
                           },
-                          child: Text(
-                              '${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}')),
+                          child: Text(endDateSelected
+                              ? '${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}'
+                              : 'انتخاب نشده')),
                     ],
                   ),
                   SizedBox(
@@ -354,7 +361,11 @@ class _BaseExpenseState extends State<BaseExpense> {
                 child: Text('اعمال'),
                 onPressed: () {
                   dbFilterSection(
-                      jalaliStartDate.toDateTime(), jalaliEndDate.toDateTime(), controller.text);
+                      startDateSelected
+                          ? jalaliStartDate.toDateTime()
+                          : DateTime(1970, 1, 1),
+                      jalaliEndDate.toDateTime(),
+                      controller.text);
                   Navigator.of(context).pop();
                 },
               ),
