@@ -86,54 +86,87 @@ class _ReportScreenState extends State<ReportScreen> {
             tmp,
             style: bodyTextStyle,
           ));
-          result.children.add(SizedBox(height: 16));
+          result.children.add(SizedBox(height: 8));
           result.children.add(Text('هزینه ها بر اساس دسته'));
         } else {
           var p = double.parse(value) / (sum[sum.length - 1]);
           percent[sum.length - 1].add(p);
           var tmp =
               '$key ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
-          result.children.add(Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 10,
-                width: 10,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                color: convertHexColorToRgb(colors.elementAt(tmpColorIndex++)),
+          result.children.add(Container(
+            padding: EdgeInsets.all(4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$key',
+                        style: TextStyle(
+                            color: generateOppositeColor(
+                                colors.elementAt(tmpColorIndex))),
+                      ),
+                      Text(
+                        '${numberFormat.format(int.parse(value))}' +
+                            ' ' +
+                            'تومان',
+                        style: TextStyle(
+                            color: generateOppositeColor(
+                                colors.elementAt(tmpColorIndex))),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(width: 10,),
-              Text(
-                tmp,
-              ),
-            ],
+                Expanded(
+                    child: Text(
+                  '${(p * 100).toStringAsFixed(1)} %',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                      color: generateOppositeColor(
+                          colors.elementAt(tmpColorIndex))),
+                ))
+              ],
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: convertHexColorToRgb(colors.elementAt(tmpColorIndex++)),
+            ),
           ));
         }
       });
 
-      List<Widget> chart = [];
-      tmpColorIndex = 0;
-      percent[percent.length - 1].forEach((element) {
-        var percent = (element * 1000).toInt();
-        chart.add(Expanded(
-            flex: percent,
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 2),
-              color: convertHexColorToRgb(colors.elementAt(tmpColorIndex)),
-              child: Text('${(percent / 10).round()} %', maxLines: 1,  style: TextStyle(color: generateOppositeColor(colors.elementAt(tmpColorIndex++)), overflow: TextOverflow.fade), textAlign: TextAlign.center,),
-            )));
-      });
+      // List<Widget> chart = [];
+      // tmpColorIndex = 0;
+      // percent[percent.length - 1].forEach((element) {
+      //   var percent = (element * 1000).toInt();
+      //   chart.add(Expanded(
+      //       flex: percent,
+      //       child: Container(
+      //         padding: EdgeInsets.symmetric(vertical: 2),
+      //         color: convertHexColorToRgb(colors.elementAt(tmpColorIndex)),
+      //         child: Text(
+      //           '${(percent / 10).round()} %',
+      //           maxLines: 1,
+      //           style: TextStyle(
+      //               color: generateOppositeColor(
+      //                   colors.elementAt(tmpColorIndex++)),
+      //               overflow: TextOverflow.fade),
+      //           textAlign: TextAlign.center,
+      //         ),
+      //       )));
+      // });
+
       setState(() {
-        result.children.add(SizedBox(height: 16));
-        Container p = Container(
-          width: double.infinity,
-          child: Row(
-            children: chart,
-          ),
-        );
-        result.children.add(p);
+        // result.children.add(SizedBox(height: 16));
+        // Container p = Container(
+        //   width: double.infinity,
+        //   child: Row(
+        //     children: chart,
+        //   ),
+        // );
+        // result.children.add(p);
         myList.add(result);
       });
     });

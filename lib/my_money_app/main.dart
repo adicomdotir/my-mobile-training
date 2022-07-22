@@ -28,7 +28,8 @@ void main(List<String> args) {
     debugShowCheckedModeBanner: false,
     themeMode: ThemeMode.dark,
     theme: ThemeData(
-        fontFamily: 'IranYekan',
+      primarySwatch: Colors.blueGrey,
+      fontFamily: 'IranYekan',
     ),
     home: HomePage(),
   ));
@@ -89,7 +90,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: Drawer(
         child: Container(
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {
                         Navigator.of(context)
                             .push(MaterialPageRoute(
-                            builder: (builder) => ReportScreen()))
+                                builder: (builder) => ReportScreen()))
                             .then((value) => dbSection());
                       },
                       child: Text('گزارش')),
