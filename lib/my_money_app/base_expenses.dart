@@ -111,8 +111,9 @@ class _BaseExpenseState extends State<BaseExpense> {
             )
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text('اضافه کردن هزینه'),
+          icon: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(

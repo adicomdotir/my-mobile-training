@@ -46,8 +46,9 @@ class _BaseCategoryState extends State<BaseCategory> {
         appBar: AppBar(
           title: Text('دسته ها'),
         ),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text( 'اضافه کردن دسته'),
+          icon: Icon(Icons.add),
           onPressed: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(
