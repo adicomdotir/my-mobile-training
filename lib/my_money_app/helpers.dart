@@ -19,11 +19,9 @@ Color generateOppositeColor(String color) {
     var red = int.parse(color.substring(0, 2), radix: 16);
     var green = int.parse(color.substring(2, 4), radix: 16);
     var blue = int.parse(color.substring(4), radix: 16);
-    if (red * green * blue < (255 * 255 * 255) / 2) {
-      resultColor = Colors.white;
-    } else {
-      resultColor = Colors.black;
-    }
+    var bgColor = Color.fromRGBO(red, green, blue, 1.0);
+    resultColor = bgColor.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+
   } catch (ex) {
     // change color if you want
   }
