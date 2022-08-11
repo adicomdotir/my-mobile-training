@@ -103,7 +103,7 @@ class _BaseExpenseState extends State<BaseExpense> {
               splashColor: Colors.transparent,
               child: Icon(Icons.filter_alt_outlined),
               onTap: () {
-                _showFilterDialog();
+                _showBottomSheet();
               },
             ),
             SizedBox(
@@ -243,142 +243,150 @@ class _BaseExpenseState extends State<BaseExpense> {
     );
   }
 
-  Future<void> _showFilterDialog() async {
+  void _showBottomSheet() {
     TextEditingController controller = TextEditingController();
-    return showDialog<void>(
+
+    showModalBottomSheet(
+      isScrollControlled: true,
       context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
+      builder: (context) {
         DateTime startDate = DateTime.now();
         Jalali jalaliStartDate = Jalali.fromDateTime(startDate);
         bool startDateSelected = false;
         DateTime endDate = DateTime.now();
         Jalali jalaliEndDate = Jalali.fromDateTime(endDate);
         bool endDateSelected = false;
-        return StatefulBuilder(builder: (ctx, StateSetter setState) {
-          return AlertDialog(
-            title: Text('فیلتر'),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextField(
-                    controller: controller,
-                    decoration: InputDecoration(
-                      labelText: 'متن جستجو',
-                      labelStyle: TextStyle(color: Colors.black87),
-                      enabledBorder: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.black87),
-                      ),
-                      focusedBorder: new OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide(color: Colors.black87),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('از تاریخ'),
-                      TextButton(
-                          onPressed: () async {
-                            var result = await _selectDate(context, startDate);
-                            setState(() {
-                              jalaliStartDate = Jalali.fromDateTime(result);
-                              startDateSelected = true;
-                            });
-                          },
-                          child: Text(startDateSelected
-                              ? '${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}'
-                              : 'انتخاب نشده')),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('تا تاریخ'),
-                      TextButton(
-                          onPressed: () async {
-                            var result = await _selectDate(context, endDate);
-                            setState(() {
-                              jalaliEndDate = Jalali.fromDateTime(result);
-                              endDateSelected = true;
-                            });
-                          },
-                          child: Text(endDateSelected
-                              ? '${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}'
-                              : 'انتخاب نشده')),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: InputDecorator(
-                          decoration: InputDecoration(
-                            labelText: 'دسته',
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 0.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16)),
+
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: StatefulBuilder(
+            builder: (ctx, StateSetter setState) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                        controller: controller,
+                        decoration: InputDecoration(
+                          labelText: 'متن جستجو',
+                          labelStyle: TextStyle(color: Colors.black87),
+                          enabledBorder: new OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.black87),
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: categoryValue,
-                              icon: const Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  categoryValue = newValue!;
-                                });
-                              },
-                              items: categoryTitle
-                                  .map<DropdownMenuItem<String>>(
-                                      (Category category) {
-                                return DropdownMenuItem<String>(
-                                  value: category.id.toString(),
-                                  child: Text(category.title),
-                                );
-                              }).toList(),
-                            ),
+                          focusedBorder: new OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.black87),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('از تاریخ'),
+                          TextButton(
+                              onPressed: () async {
+                                var result = await _selectDate(context, startDate);
+                                setState(() {
+                                  jalaliStartDate = Jalali.fromDateTime(result);
+                                  startDateSelected = true;
+                                });
+                              },
+                              child: Text(startDateSelected
+                                  ? '${jalaliStartDate.year}/${jalaliStartDate.month}/${jalaliStartDate.day}'
+                                  : 'انتخاب نشده')),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('تا تاریخ'),
+                          TextButton(
+                              onPressed: () async {
+                                var result = await _selectDate(context, endDate);
+                                setState(() {
+                                  jalaliEndDate = Jalali.fromDateTime(result);
+                                  endDateSelected = true;
+                                });
+                              },
+                              child: Text(endDateSelected
+                                  ? '${jalaliEndDate.year}/${jalaliEndDate.month}/${jalaliEndDate.day}'
+                                  : 'انتخاب نشده')),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'دسته',
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 0.0),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16)),
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<String>(
+                                  value: categoryValue,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  iconSize: 24,
+                                  elevation: 16,
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      categoryValue = newValue!;
+                                    });
+                                  },
+                                  items: categoryTitle.map<DropdownMenuItem<String>>(
+                                      (Category category) {
+                                    return DropdownMenuItem<String>(
+                                      value: category.id.toString(),
+                                      child: Text(category.title),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          TextButton(
+                            child: Text('اعمال'),
+                            onPressed: () {
+                              dbFilterSection(
+                                  startDateSelected
+                                      ? jalaliStartDate.toDateTime()
+                                      : DateTime(1970, 1, 1),
+                                  jalaliEndDate.toDateTime(),
+                                  controller.text);
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          TextButton(
+                            child: Text('لغو'),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      )
                     ],
                   ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('اعمال'),
-                onPressed: () {
-                  dbFilterSection(
-                      startDateSelected
-                          ? jalaliStartDate.toDateTime()
-                          : DateTime(1970, 1, 1),
-                      jalaliEndDate.toDateTime(),
-                      controller.text);
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('لغو'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        });
+                ),
+              );
+            }
+          ),
+        );
       },
     );
   }
