@@ -53,7 +53,7 @@ class _ReportScreenState extends State<ReportScreen> {
     TextStyle bodyTextStyle = TextStyle(fontSize: 18);
 
     List<double> sum = [];
-    List<List<double>> percent = [];
+    List<Map<String, dynamic>> expensesByCategory = [];
 
     map.forEach((key, value) {
       Column result = Column(
@@ -76,7 +76,6 @@ class _ReportScreenState extends State<ReportScreen> {
         } else if (key == 'sum') {
           result.children.add(SizedBox(height: 8));
           sum.add(double.parse(value));
-          percent.add([]);
           var tmp = 'کل هزینه' +
               ' ' +
               numberFormat.format(int.parse(value)) +
@@ -90,86 +89,69 @@ class _ReportScreenState extends State<ReportScreen> {
           result.children.add(Text('هزینه ها بر اساس دسته'));
         } else {
           var p = double.parse(value) / (sum[sum.length - 1]);
-          percent[sum.length - 1].add(p);
-          var tmp =
-              '$key ${numberFormat.format(int.parse(value))}' + ' ' + 'تومان';
-          result.children.add(Container(
-            padding: EdgeInsets.all(4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '$key',
-                        style: TextStyle(
-                            color: generateOppositeColor(
-                                colors.elementAt(tmpColorIndex))),
-                      ),
-                      Text(
-                        '${numberFormat.format(int.parse(value))}' +
-                            ' ' +
-                            'تومان',
-                        style: TextStyle(
-                            color: generateOppositeColor(
-                                colors.elementAt(tmpColorIndex))),
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                    child: Text(
-                  '${(p * 100).toStringAsFixed(1)} %',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                      color: generateOppositeColor(
-                          colors.elementAt(tmpColorIndex))),
-                ))
-              ],
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: convertHexColorToRgb(colors.elementAt(tmpColorIndex++)),
-            ),
-          ));
+          expensesByCategory.add({
+            'title': '$key',
+            'titleColor': '${colors.elementAt(tmpColorIndex)}',
+            'price': value,
+            'priceColor': '${colors.elementAt(tmpColorIndex)}',
+            'percent': p,
+            'percentColor': '${colors.elementAt(tmpColorIndex)}',
+            'bgColor': '${colors.elementAt(tmpColorIndex++)}'
+          });
         }
       });
 
-      // List<Widget> chart = [];
-      // tmpColorIndex = 0;
-      // percent[percent.length - 1].forEach((element) {
-      //   var percent = (element * 1000).toInt();
-      //   chart.add(Expanded(
-      //       flex: percent,
-      //       child: Container(
-      //         padding: EdgeInsets.symmetric(vertical: 2),
-      //         color: convertHexColorToRgb(colors.elementAt(tmpColorIndex)),
-      //         child: Text(
-      //           '${(percent / 10).round()} %',
-      //           maxLines: 1,
-      //           style: TextStyle(
-      //               color: generateOppositeColor(
-      //                   colors.elementAt(tmpColorIndex++)),
-      //               overflow: TextOverflow.fade),
-      //           textAlign: TextAlign.center,
-      //         ),
-      //       )));
-      // });
+      expensesByCategory.sort((a, b) => int.parse(b['price']) - int.parse(a['price']));
+
+      expensesByCategory.forEach((element) {
+          result.children.add(expenseByCategoryWidget(element, numberFormat));
+      });
 
       setState(() {
-        // result.children.add(SizedBox(height: 16));
-        // Container p = Container(
-        //   width: double.infinity,
-        //   child: Row(
-        //     children: chart,
-        //   ),
-        // );
-        // result.children.add(p);
         myList.add(result);
       });
     });
+  }
+
+  Widget expenseByCategoryWidget(Map<String, dynamic> object, NumberFormat numberFormat) {
+    return Container(
+          padding: EdgeInsets.all(4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      '${object['title']}',
+                      style: TextStyle(
+                          color: generateOppositeColor(object['titleColor'])),
+                    ),
+                    Text(
+                      '${numberFormat.format(int.parse(object['price']))}' +
+                          ' ' +
+                          'تومان',
+                      style: TextStyle(
+                          color: generateOppositeColor(object['priceColor'])),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                  child: Text(
+                '${(object['percent'] * 100).toStringAsFixed(1)} %',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                    color: generateOppositeColor(object['percentColor'])),
+              ))
+            ],
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: convertHexColorToRgb(object['bgColor']),
+          ),
+        );
   }
 
   List<Column> myList = [];
