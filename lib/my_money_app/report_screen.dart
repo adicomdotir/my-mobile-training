@@ -21,12 +21,19 @@ class _ReportScreenState extends State<ReportScreen> {
     DatabaseHelper databaseHelper = DatabaseHelper();
     await databaseHelper.init();
     Map<String, dynamic> map = {};
-    Set<String> colors = {};
+    Map<String, Set<String>> colors = {};
     List<Expense> allExpense = await databaseHelper.getAllExpense();
     allExpense.forEach((expense) {
-      colors.add(expense.categoryColor ?? 'null');
       String dateKey =
           getDate(DateTime.fromMicrosecondsSinceEpoch(expense.date));
+
+      // check if empty create new else use exist object
+      if (colors.containsKey(dateKey)) {
+        colors[dateKey]?.add(expense.categoryColor ?? '');
+      } else {
+        colors[dateKey] = {};
+        colors[dateKey]?.add(expense.categoryColor ?? '');
+      }
       if (map.containsKey(dateKey)) {
         if (map[dateKey].containsKey(expense.categoryTitle.toString())) {
           int tmpPrice =
@@ -55,19 +62,21 @@ class _ReportScreenState extends State<ReportScreen> {
     List<double> sum = [];
     List<Map<String, dynamic>> expensesByCategory = [];
 
-    map.forEach((key, value) {
+    map.forEach((parentKey, value) {
       Column result = Column(
         children: [],
       );
 
       int tmpColorIndex = 0;
+      expensesByCategory = [];
       Map<String, String> newValue = value;
       newValue.forEach((key, value) {
-        if (result.children.length != 0) {
-          result.children.add(SizedBox(
-            height: 4,
-          ));
-        }
+        print(result.children.length);
+        // if (result.children.length != 0) {
+        //   result.children.add(SizedBox(
+        //     height: 4,
+        //   ));
+        // }
         if (key == 'title') {
           result.children.add(Text(
             '$value',
@@ -91,20 +100,24 @@ class _ReportScreenState extends State<ReportScreen> {
           var p = double.parse(value) / (sum[sum.length - 1]);
           expensesByCategory.add({
             'title': '$key',
-            'titleColor': '${colors.elementAt(tmpColorIndex)}',
+            'titleColor': '${colors[parentKey]?.elementAt(tmpColorIndex)}',
             'price': value,
-            'priceColor': '${colors.elementAt(tmpColorIndex)}',
+            'priceColor': '${colors[parentKey]?.elementAt(tmpColorIndex)}',
             'percent': p,
-            'percentColor': '${colors.elementAt(tmpColorIndex)}',
-            'bgColor': '${colors.elementAt(tmpColorIndex++)}'
+            'percentColor': '${colors[parentKey]?.elementAt(tmpColorIndex)}',
+            'bgColor': '${colors[parentKey]?.elementAt(tmpColorIndex++)}'
           });
         }
       });
 
-      expensesByCategory.sort((a, b) => int.parse(b['price']) - int.parse(a['price']));
+      expensesByCategory
+          .sort((a, b) => int.parse(b['price']) - int.parse(a['price']));
 
       expensesByCategory.forEach((element) {
-          result.children.add(expenseByCategoryWidget(element, numberFormat));
+          result.children.add(SizedBox(
+            height: 4,
+          ));
+        result.children.add(expenseByCategoryWidget(element, numberFormat));
       });
 
       setState(() {
@@ -113,45 +126,46 @@ class _ReportScreenState extends State<ReportScreen> {
     });
   }
 
-  Widget expenseByCategoryWidget(Map<String, dynamic> object, NumberFormat numberFormat) {
+  Widget expenseByCategoryWidget(
+      Map<String, dynamic> object, NumberFormat numberFormat) {
     return Container(
-          padding: EdgeInsets.all(4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${object['title']}',
-                      style: TextStyle(
-                          color: generateOppositeColor(object['titleColor'])),
-                    ),
-                    Text(
-                      '${numberFormat.format(int.parse(object['price']))}' +
-                          ' ' +
-                          'تومان',
-                      style: TextStyle(
-                          color: generateOppositeColor(object['priceColor'])),
-                    ),
-                  ],
+      padding: EdgeInsets.all(4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '${object['title']}',
+                  style: TextStyle(
+                      color: generateOppositeColor(object['titleColor'])),
                 ),
-              ),
-              Expanded(
-                  child: Text(
-                '${(object['percent'] * 100).toStringAsFixed(1)} %',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                    color: generateOppositeColor(object['percentColor'])),
-              ))
-            ],
+                Text(
+                  '${numberFormat.format(int.parse(object['price']))}' +
+                      ' ' +
+                      'تومان',
+                  style: TextStyle(
+                      color: generateOppositeColor(object['priceColor'])),
+                ),
+              ],
+            ),
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: convertHexColorToRgb(object['bgColor']),
-          ),
-        );
+          Expanded(
+              child: Text(
+            '${(object['percent'] * 100).toStringAsFixed(1)} %',
+            textAlign: TextAlign.left,
+            style:
+                TextStyle(color: generateOppositeColor(object['percentColor'])),
+          ))
+        ],
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: convertHexColorToRgb(object['bgColor']),
+      ),
+    );
   }
 
   List<Column> myList = [];
