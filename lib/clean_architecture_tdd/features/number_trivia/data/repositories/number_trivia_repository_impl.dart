@@ -4,6 +4,7 @@ import 'package:first_flutter/clean_architecture_tdd/core/error/exception.dart';
 import 'package:first_flutter/clean_architecture_tdd/core/error/failures.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
+import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/models/number_trivia_model.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 
@@ -41,7 +42,7 @@ class NumberTriviaRepositoryImpl extends NumberTriviaRepository {
     if (await networkInfo.isConnected) {
       try {
         final remoteTrivia = await getConcreteOrRandom();
-        localDataSource.cacheNumberTrivia(remoteTrivia);
+        localDataSource.cacheNumberTrivia(NumberTriviaModel(text: remoteTrivia.text, number: remoteTrivia.number));
         return Right(remoteTrivia);
       } on ServerException {
         return Left(ServerFailure());

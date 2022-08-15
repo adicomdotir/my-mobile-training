@@ -1,6 +1,7 @@
 import 'package:first_flutter/clean_architecture_app/data/network/network_info.dart';
 import 'package:first_flutter/clean_architecture_tdd/core/util/input_converter.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/datasources/number_trivia_local_data_source.dart';
+import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/datasources/number_trivia_remote_data_source.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/data/repositories/number_trivia_repository_impl.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/repositories/number_trivia_repository.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
@@ -22,11 +23,11 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetRandomNumberTrivia(sl()));
 
   // repository
-  sl.registerLazySingleton<NumberTriviaRepository>(() => NumberTriviaRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()))
+  sl.registerLazySingleton<NumberTriviaRepository>(() => NumberTriviaRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
 
   // data sources
   sl.registerLazySingleton<NumberTriviaLocalDataSource>(() => NumberTriviaLocalDataSourceImpl(sharedPreferences: sl()));
-  sl.registerLazySingleton<NumberTriviaRepository>(() => NumberTriviaRepositoryImpl(remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
+  sl.registerLazySingleton<NumberTriviaRemoteDataSource>(() => NumberTriviaRemoteDataSourceImpl(client: sl()));
 
   // core
   sl.registerLazySingleton(() => InputConverter());

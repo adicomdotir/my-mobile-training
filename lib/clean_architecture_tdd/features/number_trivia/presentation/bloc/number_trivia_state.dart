@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/entities/number_trivia.dart';
+import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 
 abstract class NumberTriviaState extends Equatable {
   @override
