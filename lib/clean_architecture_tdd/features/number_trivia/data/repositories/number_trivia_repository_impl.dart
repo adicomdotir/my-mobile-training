@@ -11,8 +11,8 @@ import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/doma
 typedef Future<NumberTrivia> _ConcreteOrRandomChooser();
 
 class NumberTriviaRepositoryImpl extends NumberTriviaRepository {
-  final NumberTriviaRemoteDataSourceImpl remoteDataSource;
-  final NumberTriviaLocalDataSourceImpl localDataSource;
+  final NumberTriviaRemoteDataSource remoteDataSource;
+  final NumberTriviaLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
   NumberTriviaRepositoryImpl(

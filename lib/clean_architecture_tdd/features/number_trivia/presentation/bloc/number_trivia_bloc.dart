@@ -41,14 +41,16 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
             default:
               return 'Unexpected error';
           }
-        }, (trivia) => Loaded(trivia: trivia));
+        }, (trivia) => emit(Loaded(trivia: trivia)));
       });
     });
 
     on<GetTriviaForRandomNumber>((event, emit) async {
+      print('1');
       emit(Loading());
       final failureOrTrivia = await getRandomNumberTrivia(NoParams());
       failureOrTrivia.fold((failure) {
+        print('failure');
         switch (failure.runtimeType) {
           case ServerFailure:
             return SERVER_FAILURE_MESSAGE;
@@ -57,7 +59,7 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
           default:
             return 'Unexpected error';
         }
-      }, (trivia) => Loaded(trivia: trivia));
+      }, (trivia) => emit(Loaded(trivia: trivia)));
     });
   }
 }
