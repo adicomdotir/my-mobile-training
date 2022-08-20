@@ -5,6 +5,7 @@ import 'package:first_flutter/clean_architecture_tdd/core/util/input_converter.d
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/usecases/get_concrete_number_trivia.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/usecases/get_random_number_trivia.dart';
 import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/presentation/bloc/bloc.dart';
+import 'package:first_flutter/clean_architecture_tdd/features/number_trivia/domain/entities/number_trivia.dart';
 
 const String SERVER_FAILURE_MESSAGE = 'Server Failure';
 const String CACHE_FAILURE_MESSAGE = 'Cache Failure';
@@ -23,43 +24,49 @@ class NumberTriviaBloc extends Bloc<NumberTriviaEvent, NumberTriviaState> {
       : getRandomNumberTrivia = random,
         getConcreteNumberTrivia = concrete,
         super(Empty()) {
-    on<GetTriviaForConcreteNumber>((event, emit) {
+    on<GetTriviaForConcreteNumberInit>((event, emit) async {
       final inputEither =
           inputConverter.stringToUnsignedInteger(event.numberString);
       inputEither.fold(
           (failure) => emit(Error(message: INVALID_INPUT_FAILURE_MESSAGE)),
           (integer) async {
         emit(Loading());
-        final failureOrTrivia =
-            await getConcreteNumberTrivia(Params(number: integer));
-        failureOrTrivia.fold((failure) {
-          switch (failure.runtimeType) {
-            case ServerFailure:
-              return SERVER_FAILURE_MESSAGE;
-            case CacheFailure:
-              return CACHE_FAILURE_MESSAGE;
-            default:
-              return 'Unexpected error';
-          }
-        }, (trivia) => emit(Loaded(trivia: trivia)));
+        add(GetTriviaForConcreteNumber(integer));
       });
     });
 
     on<GetTriviaForRandomNumber>((event, emit) async {
-      print('1');
       emit(Loading());
       final failureOrTrivia = await getRandomNumberTrivia(NoParams());
       failureOrTrivia.fold((failure) {
-        print('failure');
         switch (failure.runtimeType) {
           case ServerFailure:
-            return SERVER_FAILURE_MESSAGE;
+            return Error(message: SERVER_FAILURE_MESSAGE);
           case CacheFailure:
-            return CACHE_FAILURE_MESSAGE;
+            return Error(message: CACHE_FAILURE_MESSAGE);
           default:
-            return 'Unexpected error';
+            return Error(message: 'Unexpected error');
         }
       }, (trivia) => emit(Loaded(trivia: trivia)));
+    });
+
+    on<GetTriviaForConcreteNumber>((event, emit) async {
+      final failureOrTrivia =
+          await getConcreteNumberTrivia(Params(number: event.number));
+
+      failureOrTrivia.fold((failure) {
+        switch (failure.runtimeType) {
+          case ServerFailure:
+            return Error(message: SERVER_FAILURE_MESSAGE);
+          case CacheFailure:
+            return Error(message: CACHE_FAILURE_MESSAGE);
+          default:
+            return Error(message: 'Unexpected error');
+        }
+      }, (trivia) async {
+        emit(Loaded(
+            trivia: NumberTrivia(number: trivia.number, text: trivia.text)));
+      });
     });
   }
 }
