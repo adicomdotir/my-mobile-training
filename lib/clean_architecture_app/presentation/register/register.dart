@@ -15,7 +15,6 @@ import '../resources/values_manager.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../app/app_prefs.dart';
-import 'package:image_picker/image_picker.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
@@ -27,7 +26,6 @@ class RegisterView extends StatefulWidget {
 class _RegisterViewState extends State<RegisterView> {
   RegisterViewModel _viewModel = instance<RegisterViewModel>();
   AppPreferances _appPreferences = instance<AppPreferances>();
-  ImagePicker picker = instance<ImagePicker>();
   final _formKey = GlobalKey<FormState>();
 
   TextEditingController _userNameTextEditingController =
@@ -124,7 +122,7 @@ class _RegisterViewState extends State<RegisterView> {
                 Center(
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: AppPadding.p20,
+                        top: AppPadding.p20,
                         left: AppPadding.p28,
                         right: AppPadding.p28,
                         bottom: AppPadding.p12),
@@ -183,8 +181,9 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(height: AppSize.s12),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: AppPadding.p12,
-                      left: AppPadding.p28, right: AppPadding.p28),
+                      top: AppPadding.p12,
+                      left: AppPadding.p28,
+                      right: AppPadding.p28),
                   child: StreamBuilder<String?>(
                     stream: _viewModel.outputErrorPassword,
                     builder: (context, snapshot) {
@@ -201,8 +200,9 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(height: AppSize.s12),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: AppPadding.p12,
-                      left: AppPadding.p28, right: AppPadding.p28),
+                      top: AppPadding.p12,
+                      left: AppPadding.p28,
+                      right: AppPadding.p28),
                   child: Container(
                     height: AppSize.s40,
                     decoration: BoxDecoration(
@@ -315,13 +315,13 @@ class _RegisterViewState extends State<RegisterView> {
   }
 
   _imageFormGallery() async {
-    var image = await picker.pickImage(source: ImageSource.gallery);
-    _viewModel.setProfilePicture(File(image?.path ?? ""));
+    // var image = await picker.pickImage(source: ImageSource.gallery);
+    // _viewModel.setProfilePicture(File(image?.path ?? ""));
   }
 
   _imageFormCamera() async {
-    var image = await picker.pickImage(source: ImageSource.camera);
-    _viewModel.setProfilePicture(File(image?.path ?? ""));
+    // var image = await picker.pickImage(source: ImageSource.camera);
+    // _viewModel.setProfilePicture(File(image?.path ?? ""));
   }
 
   @override

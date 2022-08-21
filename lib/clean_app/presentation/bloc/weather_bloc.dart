@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:first_flutter/clean_app/domain/usecases/get_current_weather.dart';
 import 'package:first_flutter/clean_app/presentation/bloc/weather_event.dart';
 import 'package:first_flutter/clean_app/presentation/bloc/weather_state.dart';
-import '';
+import 'package:rxdart/rxdart.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   final GetCurrentWeather _getCurrentWeather;
