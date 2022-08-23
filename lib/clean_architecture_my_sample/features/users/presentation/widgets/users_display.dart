@@ -1,3 +1,4 @@
+import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/presentation/pages/user_detail_page.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/users/domain/entities/user.dart';
 import 'package:flutter/material.dart';
 
@@ -16,13 +17,20 @@ class UsersDisplay extends StatelessWidget {
         child: ListView.builder(
           itemCount: users.length,
           itemBuilder: (context, index) {
-            return Container(
-                height: 48,
-                child: Center(
-                    child: Text(
-                  users[index].name,
-                  style: TextStyle(fontSize: 24),
-                )));
+            return GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => UserDetailPage(users[index].id),
+                ));
+              },
+              child: Container(
+                  height: 48,
+                  child: Center(
+                      child: Text(
+                    users[index].name,
+                    style: TextStyle(fontSize: 24),
+                  ))),
+            );
           },
         ));
   }
