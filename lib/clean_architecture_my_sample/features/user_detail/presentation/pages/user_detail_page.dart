@@ -32,6 +32,8 @@ class UserDetailPage extends StatelessWidget {
                 return CircularProgressIndicator();
               } else if (state is UserDetailLoadedState) {
                 return UserDetailDisplay(state.user);
+              } else if (state is UserDetailErrorState) {
+                return Text(state.message);
               } else
                 return Container();
             },

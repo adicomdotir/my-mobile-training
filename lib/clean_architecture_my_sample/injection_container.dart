@@ -1,7 +1,7 @@
 
 import 'package:first_flutter/clean_architecture_my_sample/core/network/network_info.dart';
-import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/repositories/data_sources/user_detail_local_data_source.dart';
-import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/repositories/data_sources/user_detail_remote_data_source.dart';
+import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/data_sources/user_detail_local_data_source.dart';
+import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/data_sources/user_detail_remote_data_source.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/repositories/user_detail_repository_impl.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/domain/repositories/user_detail_repository.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/domain/use_cases/get_user_detail.dart';

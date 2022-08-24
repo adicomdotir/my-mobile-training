@@ -21,11 +21,14 @@ class UserDetailBloc extends Bloc<UserDetailEvent, UserDetailState> {
       result.fold((failure) {
         switch (failure.runtimeType) {
           case ServerFailure:
-            return UserDetailErrorState(message: SERVER_FAILURE_MESSAGE);
+            emit(UserDetailErrorState(message: SERVER_FAILURE_MESSAGE));
+            break;
           case CacheFailure:
-            return UserDetailErrorState(message: CACHE_FAILURE_MESSAGE);
+            emit(UserDetailErrorState(message: CACHE_FAILURE_MESSAGE));
+            break;
           default:
-            return UserDetailErrorState(message: 'Unexpected errro');
+            emit(UserDetailErrorState(message: 'Unexpected error'));
+            break;
         }
       }, (user) => emit(UserDetailLoadedState(user: user)));
     });

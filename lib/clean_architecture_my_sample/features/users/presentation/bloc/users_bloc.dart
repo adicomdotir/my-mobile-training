@@ -23,11 +23,14 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
       result.fold((failure) {
         switch (failure.runtimeType) {
           case ServerFailure:
-            return UsersErrorState(message: SERVER_FAILURE_MESSAGE);
+            emit(UsersErrorState(message: SERVER_FAILURE_MESSAGE));
+            break;
           case CacheFailure:
-            return UsersErrorState(message: CACHE_FAILURE_MESSAGE);
+            emit(UsersErrorState(message: CACHE_FAILURE_MESSAGE));
+            break;
           default:
-            return UsersErrorState(message: 'Unexpected error');
+            emit(UsersErrorState(message: 'Unexpected error'));
+            break;
         }
       }, (users) => emit(UsersLoadedState(users: users)));
     });

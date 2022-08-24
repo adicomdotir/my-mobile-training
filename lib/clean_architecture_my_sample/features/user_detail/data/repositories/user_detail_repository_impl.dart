@@ -2,8 +2,8 @@ import 'package:first_flutter/clean_architecture_my_sample/core/error/exception.
 import 'package:first_flutter/clean_architecture_my_sample/core/error/failures.dart';
 import 'package:dartz/dartz.dart';
 import 'package:first_flutter/clean_architecture_my_sample/core/network/network_info.dart';
-import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/repositories/data_sources/user_detail_local_data_source.dart';
-import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/repositories/data_sources/user_detail_remote_data_source.dart';
+import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/data_sources/user_detail_local_data_source.dart';
+import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/data/data_sources/user_detail_remote_data_source.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/user_detail/domain/repositories/user_detail_repository.dart';
 import 'package:first_flutter/clean_architecture_my_sample/features/users/domain/entities/user.dart';
 
