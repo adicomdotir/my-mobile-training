@@ -1,3 +1,4 @@
+import 'package:first_flutter/advanced_course/features/weather/presentation/bloc/home_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -18,6 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textEditingController = TextEditingController();
   String cityName = "Tehran";
   final PageController _pageController = PageController();
+
+  @override
+  void initState() {
+    BlocProvider.of<HomeBloc>(context).add(LoadCwEvent(cityName));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,6 @@ class WeatherRepositoryImpl extends WeatherRepository {
       if (response.statusCode == 200) {
         CurrentCityEntity currentCityEntity =
             CurrentCityModel.fromJson(response.data);
-
         return DataSuccess(currentCityEntity);
       } else {
         return const DataFailed("Something Went Wrong. try again...");
