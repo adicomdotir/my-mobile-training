@@ -2,9 +2,14 @@ import 'package:first_flutter/advanced_course/features/weather/presentation/bloc
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../../../core/params/forecast_params.dart';
 import '../../../../core/widgets/app_background.dart';
+import '../../../../core/widgets/day_weather_view.dart';
+import '../../data/models/forecast_days_model.dart';
 import '../../domain/entities/current_city_entity.dart';
+import '../../domain/entities/forecast_days_entity.dart';
 import '../bloc/cw_status.dart';
+import '../bloc/fw_status.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_state.dart';
 
@@ -17,7 +22,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textEditingController = TextEditingController();
-  String cityName = "Tehran";
+  String cityName = "Ardabil";
   final PageController _pageController = PageController();
 
   @override
@@ -102,12 +107,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   cwCompleted.currentCityEntity;
 
               /// create params for api call
-              // final ForecastParams forecastParams = ForecastParams(
-              //     currentCityEntity.coord!.lat!, currentCityEntity.coord!.lon!);
+              final ForecastParams forecastParams = ForecastParams(
+                  currentCityEntity.coord!.lat!, currentCityEntity.coord!.lon!);
 
               /// start load Fw event
-              // BlocProvider.of<HomeBloc>(context)
-              //     .add(LoadFwEvent(forecastParams));
+              BlocProvider.of<HomeBloc>(context)
+                  .add(LoadFwEvent(forecastParams));
 
               /// change Times to Hour --5:55 AM/PM----
               // final sunrise = DateConverter.changeDtToDateTimeHour(
@@ -205,27 +210,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
 
                                     /// min temp
-                                    // Column(
-                                    //   children: [
-                                    //     const Text(
-                                    //       "min",
-                                    //       style: TextStyle(
-                                    //         fontSize: 16,
-                                    //         color: Colors.grey,
-                                    //       ),
-                                    //     ),
-                                    //     const SizedBox(
-                                    //       height: 10,
-                                    //     ),
-                                    //     Text(
-                                    //       "${currentCityEntity.main!.tempMin!.round()}\u00B0",
-                                    //       style: const TextStyle(
-                                    //         fontSize: 16,
-                                    //         color: Colors.white,
-                                    //       ),
-                                    //     )
-                                    //   ],
-                                    // ),
+                                    Column(
+                                      children: [
+                                        const Text(
+                                          "min",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          "${currentCityEntity.main!.tempMin!.round()}\u00B0",
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ],
                                 )
                               ],
@@ -276,63 +281,63 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   /// forecast weather 7 days
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 15),
-                  //   child: SizedBox(
-                  //     width: double.infinity,
-                  //     height: 100,
-                  //     child: Padding(
-                  //       padding: const EdgeInsets.only(left: 10.0),
-                  //       child: Center(
-                  //         child: BlocBuilder<HomeBloc, HomeState>(
-                  //           builder: (BuildContext context, state) {
-                  //             /// show Loading State for Fw
-                  //             if (state.fwStatus is FwLoading) {
-                  //               return const DotLoadingWidget();
-                  //             }
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 10.0),
+                        child: Center(
+                          child: BlocBuilder<HomeBloc, HomeState>(
+                            builder: (BuildContext context, state) {
+                              /// show Loading State for Fw
+                              if (state.fwStatus is FwLoading) {
+                                return const CircularProgressIndicator();
+                              }
 
-                  //             /// show Completed State for Fw
-                  //             if (state.fwStatus is FwCompleted) {
-                  //               /// casting
-                  //               final FwCompleted fwCompleted =
-                  //                   state.fwStatus as FwCompleted;
-                  //               final ForecastDaysEntity forecastDaysEntity =
-                  //                   fwCompleted.forecastDaysEntity;
-                  //               final List<Daily> mainDaily =
-                  //                   forecastDaysEntity.daily!;
+                              /// show Completed State for Fw
+                              if (state.fwStatus is FwCompleted) {
+                                /// casting
+                                final FwCompleted fwCompleted =
+                                    state.fwStatus as FwCompleted;
+                                final ForecastDaysEntity forecastDaysEntity =
+                                    fwCompleted.forecastDaysEntity;
+                                final List<Daily> mainDaily =
+                                    forecastDaysEntity.daily!;
 
-                  //               return ListView.builder(
-                  //                 shrinkWrap: true,
-                  //                 scrollDirection: Axis.horizontal,
-                  //                 itemCount: 8,
-                  //                 itemBuilder: (
-                  //                   BuildContext context,
-                  //                   int index,
-                  //                 ) {
-                  //                   return DaysWeatherView(
-                  //                     daily: mainDaily[index],
-                  //                   );
-                  //                 },
-                  //               );
-                  //             }
+                                return ListView.builder(
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 8,
+                                  itemBuilder: (
+                                    BuildContext context,
+                                    int index,
+                                  ) {
+                                    return DaysWeatherView(
+                                      daily: mainDaily[index],
+                                    );
+                                  },
+                                );
+                              }
 
-                  //             /// show Error State for Fw
-                  //             if (state.fwStatus is FwError) {
-                  //               final FwError fwError =
-                  //                   state.fwStatus as FwError;
-                  //               return Center(
-                  //                 child: Text(fwError.message!),
-                  //               );
-                  //             }
+                              /// show Error State for Fw
+                              if (state.fwStatus is FwError) {
+                                final FwError fwError =
+                                    state.fwStatus as FwError;
+                                return Center(
+                                  child: Text(fwError.message!),
+                                );
+                              }
 
-                  //             /// show Default State for Fw
-                  //             return Container();
-                  //           },
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
+                              /// show Default State for Fw
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
 
                   /// divider
                   Padding(

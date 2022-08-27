@@ -1,3 +1,4 @@
+import 'package:first_flutter/advanced_course/features/weather/domain/use_cases/get_forecast_weather_usecase.dart';
 import 'package:get_it/get_it.dart';
 
 import 'features/weather/data/data_sources/remote/remote_data_source.dart';
@@ -18,7 +19,10 @@ setup() async {
   /// use case
   locator.registerSingleton<GetCurrentWeatherUseCase>(
       GetCurrentWeatherUseCase(locator()));
+  locator.registerSingleton<GetForecastWeatherUseCase>(
+      GetForecastWeatherUseCase(locator()));
 
-  locator.registerSingleton<HomeBloc>(
-      HomeBloc(getCurrentWeatherUseCase: locator()));
+  locator.registerSingleton<HomeBloc>(HomeBloc(
+      getCurrentWeatherUseCase: locator(),
+      getForecastWeatherUseCase: locator()));
 }
