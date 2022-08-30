@@ -3,10 +3,19 @@ import 'package:first_flutter/crypto_app/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController(initialPage: 0);
+
+  int defaultChoiceIndex = 0;
+
+  final choices = ['One', 'Two', 'Three'];
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +86,31 @@ class HomePage extends StatelessWidget {
                           primary: Colors.red),
                     )),
                   ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 5,
+                ),
+                child: Wrap(
+                  spacing: 8,
+                  children: List.generate(
+                    choices.length,
+                    (index) => ChoiceChip(
+                      label: Text(
+                        choices[index],
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      selected: defaultChoiceIndex == index,
+                      selectedColor: Colors.blue,
+                      onSelected: (value) {
+                        setState(() {
+                          defaultChoiceIndex =
+                              value ? index : defaultChoiceIndex;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               )
             ],
