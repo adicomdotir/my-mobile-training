@@ -1,7 +1,10 @@
+import 'package:first_flutter/crypto_app/providers/crypto_data_provider.dart';
 import 'package:first_flutter/crypto_app/ui/ui_helper/home_page_view.dart';
 import 'package:first_flutter/crypto_app/ui/ui_helper/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:provider/provider.dart';
+import 'package:first_flutter/crypto_app/network/response_model.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -16,6 +19,13 @@ class _HomePageState extends State<HomePage> {
   int defaultChoiceIndex = 0;
 
   final choices = ['One', 'Two', 'Three'];
+
+  @override
+  void initState() {
+    Provider.of<CryptoDataProvider>(context, listen: false)
+        .getTopMarketCapData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +122,20 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+              ),
+              Consumer<CryptoDataProvider>(
+                builder: (context, value, child) {
+                  if (value.state.status == Status.Loading) {
+                    return Text(value.state.message);
+                  }
+                  if (value.state.status == Status.Completed) {
+                    return Text('Done');
+                  }
+                  if (value.state.status == Status.Error) {
+                    return Text(value.state.message);
+                  }
+                  return Container();
+                },
               )
             ],
           ),
